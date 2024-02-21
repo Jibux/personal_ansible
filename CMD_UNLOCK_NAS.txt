@@ -1,0 +1,2 @@
+curl -k 'https://nas:5001/webapi/auth.cgi?api=SYNO.API.Auth&version=6&method=login&account=sasa&passwd=sasa&session=FileStation&format=sid'
+curl -k -X POST 'https://nas:5001/webapi/entry.cgi' -d 'api=SYNO.Core.Share.Crypto&version=1&method=decrypt&name=Test&password=12345678&_sid='
