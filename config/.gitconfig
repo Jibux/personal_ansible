@@ -1,9 +1,11 @@
+# vi:syntax=gitconfig
 [include]
 	path = ~/.gitconfig.local
-
 [core]
 	editor = vim
 	pager = diff-so-fancy | less -RFX
+[init]
+	defaultBranch = main
 [alias]
 	co = checkout
 	sw = switch
@@ -50,17 +52,39 @@
 	diffw = diff -w
 	diffwo = diff --word-diff
 	diffst = diff --name-status
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
 [pull]
 	rebase = true
 [rerere]
 	enabled = true
+	autoupdate = true
 [push]
 	default = simple
+	autoSetupRemote = true
+	followTags = true
 [fetch]
 	prune = true
+	pruneTags = true
+	all = true
+[help]
+	autocorrect = prompt
 [rebase]
-	autosquash = true
+	autoSquash = true
+	 autoStash = true
 	updateRefs = true
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+[merge]
+	# (just 'diff3' if git version < 2.3)
+	conflictstyle = zdiff3
 #[pager]
 #	log = diff-so-fancy | less --tabs=2 -RFX
 #	show = diff-so-fancy | less --tabs=2 -RFX
@@ -81,6 +105,3 @@
 	whitespace = red reverse
 [diff-so-fancy]
 	stripLeadingSymbols = false
-
-
-# vi:syntax=gitconfig
