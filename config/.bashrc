@@ -242,9 +242,11 @@ PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;}history -a"
 export LS_OPTIONS="$alias_color -h --group-directories-first"
 alias ls='ls $LS_OPTIONS'
 alias ll='ls $LS_OPTIONS -lA'
+alias llrt='ls $LS_OPTIONS -lArt'
 alias la='ls $LS_OPTIONS -A'
 alias lla='ls $LS_OPTIONS -al'
 alias l='ls $LS_OPTIONS -l'
+alias lrt='ls $LS_OPTIONS -lrt'
 alias sl='ls'
 
 alias ..='cd ..'
