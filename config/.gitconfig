@@ -54,6 +54,8 @@
 	diffst = diff --name-status
 [column]
 	ui = auto
+[commit]
+        verbose = true
 [branch]
 	sort = -committerdate
 [tag]
