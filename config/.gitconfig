@@ -7,7 +7,8 @@
 [init]
 	defaultBranch = main
 [alias]
-	co = checkout
+	# Comment this until I change my habbit to use git switch
+	# co = checkout
 	sw = switch
 	br = branch
 	bra = branch -a
