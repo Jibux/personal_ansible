@@ -64,7 +64,7 @@ process_branch()
 	fi
 }
 
-git co "$(git defbr)"
+git sw "$(git defbr)"
 git pull
 
 while IFS= read -u 3 -r br; do
