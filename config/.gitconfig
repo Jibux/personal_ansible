@@ -26,8 +26,8 @@
 	unstage = reset HEAD --
 	defbr = "!git remote show origin | sed -n '/HEAD branch/s/.*: //p'"
 	pushu = "!git push --set-upstream origin \"$(git rev-parse --abbrev-ref HEAD)\""
-	mergem = "!defbr=$(git defbr) && br=$(git rev-parse --abbrev-ref HEAD) && [ \"$br\" != \"$defbr\" ] && git co $defbr && git pull && git co $br && git rb $defbr && git co $defbr && git merge $br && git push origin $defbr && git br -D $br && git push origin :$br"
-	rebasem = "!defbr=$(git defbr) && br=$(git rev-parse --abbrev-ref HEAD) && [ \"$br\" != \"$defbr\" ] && git pull && git co $defbr && git pull && git co $br && git rb $defbr && git pushf"
+	mergem = "!defbr=$(git defbr) && br=$(git rev-parse --abbrev-ref HEAD) && [ \"$br\" != \"$defbr\" ] && git sw $defbr && git pull && git sw $br && git rb $defbr && git sw $defbr && git merge $br && git push origin $defbr && git br -D $br && git push origin :$br"
+	rebasem = "!defbr=$(git defbr) && br=$(git rev-parse --abbrev-ref HEAD) && [ \"$br\" != \"$defbr\" ] && git pull && git sw $defbr && git pull && git sw $br && git rb $defbr && git pushf"
 	pushf = push -f
 	sync = "!git pull --rebase && git push"
 	syncf = "!git pull --rebase && git pushf"
@@ -44,7 +44,7 @@
 	cpk = cherry-pick
 	cpka = cherry-pick --abort
 	cpkc = cherry-pick --continue
-	cpktobr = "!f() { msg=$(git hashmsg \"$2\") && git co $1 && git pull && hash_revert=$(git msghash \"$msg\") && [ -n \"$hash_revert\" ] && git revert $hash_revert ; git cpk $2 && git sync && git co -;}; f"
+	cpktobr = "!f() { msg=$(git hashmsg \"$2\") && git sw $1 && git pull && hash_revert=$(git msghash \"$msg\") && [ -n \"$hash_revert\" ] && git revert $hash_revert ; git cpk $2 && git sync && git sw -;}; f"
 	gr = grep
 	rv = revert
 	l = log --graph --pretty=format:'%Cred%h%Creset%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
