@@ -39,6 +39,7 @@
 	rbmi = rbm -i
 	rbmis = rbmi --autosquash
 	rst = reset
+	ro = restore
 	sh = show
 	cpk = cherry-pick
 	cpka = cherry-pick --abort
