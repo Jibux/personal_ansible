@@ -1,0 +1,8 @@
+---
+- name: Configure {{ setup_mount.src }} to {{ setup_mount.dest }}
+  ansible.posix.mount:
+    src: "{{ setup_mount.src }}"
+    path: "{{ setup_mount.dest }}"
+    fstype: "{{ setup_mount.fstype|d('ext4') }}"
+    state: "{{ setup_mount.state|d('mounted') }}"
+    passno: "{{ setup_mount.passno|d(2) }}"

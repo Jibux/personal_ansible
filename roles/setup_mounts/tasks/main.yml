@@ -1,0 +1,6 @@
+---
+- include_tasks:
+    file: setup_mount.yml
+  loop: "{{ setup_mounts }}"
+  loop_control:
+    loop_var: setup_mount

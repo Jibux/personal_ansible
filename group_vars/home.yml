@@ -9,3 +9,10 @@ specific_scripts:
   - src: backup/backup_nas.sh
   - src: backup/backup_nas_family.sh
   - src: backup/X7.sh
+
+setup_mounts:
+  #- src: /dev/mapper/hdd-log
+  #  dest: /var/log
+  #  state: present
+  - src: /dev/mapper/hdd-data
+    dest: /data
