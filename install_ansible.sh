@@ -19,10 +19,15 @@ VENV_DIR="$SCRIPT_ROOT_PATH/.venv"
 echo "SCRIPT_ROOT_PATH: $SCRIPT_ROOT_PATH"
 echo "VENV_DIR: $VENV_DIR"
 
+if ! command -v curl >/dev/null; then
+	sudo apt update && sudo apt install curl
+fi
+
 if command -v uv >/dev/null; then
 	uv self update
 else
 	curl -LsSf https://astral.sh/uv/install.sh | sh
+	export PATH=$PATH:$HOME/.local/bin
 fi
 
 if command -v ruff >/dev/null; then
@@ -32,7 +37,7 @@ else
 fi
 
 if [ -d "$VENV_DIR" ]; then
-	rm -rf "$VENV_DIR"
+	sudo rm -rf "$VENV_DIR"
 fi
 
 uv venv --directory "$SCRIPT_ROOT_PATH"
