@@ -1,0 +1,6 @@
+---
+- name: Purge firefox
+  ansible.builtin.apt:
+    name: firefox
+    state: absent
+    purge: true

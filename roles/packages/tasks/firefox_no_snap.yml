@@ -1,0 +1,41 @@
+---
+- name: APT preferences
+  copy:
+    dest: /etc/apt/preferences.d/firefox-no-snap
+    content: |
+      # Managed by ansible
+      Package: firefox*
+      Pin: release o=Ubuntu*
+      Pin-Priority: -1
+      Package: *
+      Pin: origin packages.mozilla.org
+      Pin-Priority: 1000
+    owner: root
+    group: root
+    mode: "0444"
+
+- name: APT key packages.mozilla.org
+  ansible.builtin.get_url:
+    url: https://packages.mozilla.org/apt/repo-signing-key.gpg
+    dest: /etc/apt/keyrings/packages.mozilla.org.asc
+
+- name: APT repo packages.mozzila.org
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main"
+    filename: mozzila-org
+    mode: "0444"
+
+- name: Remove firefox snap package
+  community.general.snap:
+    name: firefox
+    state: absent
+  notify:
+    - Purge firefox
+
+- name: Flush handlers
+  meta: flush_handlers
+
+- name: Install firefox from APT repository
+  ansible.builtin.apt:
+    name: firefox
+    state: latest
