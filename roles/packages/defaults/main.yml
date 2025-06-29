@@ -16,3 +16,5 @@ apt_packages:
   - exfatprogs
   - shellcheck
   - terminator
+  - lvm2
+  - autofs
