@@ -5,8 +5,8 @@
   loop_control:
     loop_var: setup_file
   vars:
-    user_name: "{{ ansible_env.USER }}"
-    home_dir: "{{ ansible_env.HOME }}"
+    user_name: "{{ user_name }}"
+    home_dir: "{{ user_home_dir }}"
   when: not setup_file.root_only|d(false)
 
 - become: true

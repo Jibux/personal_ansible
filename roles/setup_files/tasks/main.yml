@@ -24,6 +24,18 @@
     - config_files
 
 - include_tasks:
+    file: setup_symlinks.yml
+    apply:
+      tags:
+        - setup_files
+        - symlinks
+  vars:
+    setup_files: "{{ symlinks }}"
+  tags:
+    - setup_files
+    - symlinks
+
+- include_tasks:
     file: setup_files.yml
     apply:
       tags:

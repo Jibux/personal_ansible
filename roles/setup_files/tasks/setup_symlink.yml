@@ -1,0 +1,28 @@
+---
+- name: Stat {{ destination }}
+  stat:
+    path: "{{ destination }}"
+  register: symlink_dest_st
+
+- when:
+    - symlink_dest_st.stat.exists
+    - symlink_dest_st.stat.isdir or symlink_dest_st.stat.isreg
+  block:
+    - name: Copy {{ destination }} content to {{ symlink.src }}
+      ansible.posix.synchronize:
+        src: "{{ destination }}{{ suffix }}"
+        dest: "{{ symlink.src }}{{ suffix }}"
+        delete: false
+      vars:
+        suffix: "{{ '/' if symlink_dest_st.stat.isdir else '' }}"
+
+    - name: Remove {{ destination }}
+      file:
+        path: "{{ destination }}"
+        state: absent
+
+- name: Link {{ symlink.src }} to {{ destination }}
+  file:
+    src: "{{ symlink.src }}"
+    path: "{{ destination }}"
+    state: link

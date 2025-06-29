@@ -1,4 +1,5 @@
 ---
+user_name: "{{ lookup('env', 'USER' ) }}"
 user_home_dir: "{{ lookup('env', 'HOME' ) }}"
 project_root_path: "{{ lookup('ansible.builtin.pipe', 'git rev-parse --show-toplevel' ) }}"
 git_repositories_path: "{{ project_root_path }}/.git_repositories"
