@@ -28,10 +28,13 @@ git_files:
     dest: .urxvt/ext/font-size
   - src: vim/solarized/vim-colors-solarized/colors/solarized.vim
     dest: .vim/colors/solarized.vim
+    root_use: true
   - src: vim/vim-plug/plug.vim
     dest: .vim/autoload/plug.vim
+    root_use: true
   - src: tmux
     dest: .tmux/plugins
+    root_use: true
 
 config_files:
   - src: .bashrc
