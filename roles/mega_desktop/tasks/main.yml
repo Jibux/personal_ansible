@@ -1,0 +1,11 @@
+---
+- import_role:
+    name: mega
+    tasks_from: mega_repo
+
+- name: Install Mega
+  apt:
+    name:
+      - megasync
+      - nautilus-megasync
+    state: latest

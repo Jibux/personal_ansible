@@ -1,15 +1,6 @@
 ---
-- name: Add mega apt key
-  apt_key:
-    url: https://mega.nz/keys/MEGA_signing.key
-    keyring: /usr/share/keyrings/meganz-archive-keyring.gpg
-    state: present
-
-- name: Add mega repo
-  apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/meganz-archive-keyring.gpg] https://mega.nz/linux/repo/xUbuntu_{{ ansible_distribution_version }}/ ./"
-    filename: megasync
-    state: present
+- include_tasks:
+    file: mega_repo.yml
 
 - name: Install megacmd
   apt:
