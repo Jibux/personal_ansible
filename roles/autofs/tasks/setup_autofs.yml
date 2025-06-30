@@ -1,0 +1,10 @@
+---
+- name: Setup autofs for {{ autofs_item.name }}
+  template:
+    src: auto.name.j2
+    dest: "/etc/auto.{{ autofs_item.name }}"
+    mode: "0400"
+    owner: root
+    group: root
+  notify:
+    - Restart autofs

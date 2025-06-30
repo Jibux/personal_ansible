@@ -1,0 +1,23 @@
+---
+- name: Install autofs packages
+  apt:
+    name: "{{ autofs_packages }}"
+    state: latest
+
+# FIXME: Find a way to securely set credential file
+
+- include_tasks:
+    file: setup_autofs.yml
+  loop: "{{ setup_autofs }}"
+  loop_control:
+    loop_var: autofs_item
+
+- name: Setup autofs ansible
+  template:
+    src: ansible.autofs.j2
+    dest: /etc/auto.master.d/ansible.autofs
+    mode: "0400"
+    owner: root
+    group: root
+  notify:
+    - Restart autofs

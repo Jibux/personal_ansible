@@ -1,0 +1,3 @@
+{%- for mount in autofs_item.mounts %}
+{{ mount.name }} -fstype={{ autofs_item.type }},{{ autofs_item.mode }},uid={{ autofs_item.uid }},gid={{ autofs_item.gid }},credentials={{ autofs_item.credentials }} ://{{ autofs_item.src }}/{{ mount.src }}
+{% endfor %}

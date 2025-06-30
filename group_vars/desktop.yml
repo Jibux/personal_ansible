@@ -69,3 +69,23 @@ etc_hosts:
   - ip: 192.168.106.100
     names:
       - nas
+
+setup_autofs:
+  - src: nas
+    name: nas
+    type: cifs
+    credentials: /root/.autofs-nas-cred
+    uid: 1000
+    gid: 1000
+    mode: rw
+    mounts:
+      - name: nas_media
+        src: JIBUX-MEDIA
+      - name: nas_archives
+        src: JIBUX-ARCHIVES
+      - name: nas_data
+        src: JIBUX-DATA
+      - name: nas_family
+        src: JIBUX-FAMILY
+      - name: nas_agathe
+        src: AGATHE

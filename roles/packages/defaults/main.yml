@@ -17,4 +17,3 @@ apt_packages:
   - shellcheck
   - terminator
   - lvm2
-  - autofs
