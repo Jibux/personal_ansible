@@ -1,0 +1,3 @@
+{% for item in etc_hosts %}
+{{ item.ip }} {{ item.names|join(' ') }}
+{% endfor %}

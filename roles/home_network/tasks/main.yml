@@ -1,0 +1,7 @@
+---
+- name: Fill /etc/hosts
+  ansible.builtin.blockinfile:
+    path: /etc/hosts
+    block: "{{ lookup('template', 'etc_hosts.j2') }}"
+    append_newline: true
+    prepend_newline: true

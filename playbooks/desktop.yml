@@ -1,5 +1,6 @@
 ---
 - import_playbook: packages.yml
+- import_playbook: home_network.yml
 - import_playbook: mega_desktop.yml
 - import_playbook: setup_mounts.yml
 - import_playbook: setup_files.yml

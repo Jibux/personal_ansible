@@ -1,0 +1,5 @@
+---
+- hosts: desktop
+  become: true
+  roles:
+    - role: home_network
