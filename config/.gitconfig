@@ -28,7 +28,7 @@
 	pushu = "!git push --set-upstream origin \"$(git rev-parse --abbrev-ref HEAD)\""
 	mergem = "!defbr=$(git defbr) && br=$(git rev-parse --abbrev-ref HEAD) && [ \"$br\" != \"$defbr\" ] && git sw $defbr && git pull && git sw $br && git rb $defbr && git sw $defbr && git merge $br && git push origin $defbr && git br -D $br && git push origin :$br"
 	rebasem = "!defbr=$(git defbr) && br=$(git rev-parse --abbrev-ref HEAD) && [ \"$br\" != \"$defbr\" ] && git pull && git sw $defbr && git pull && git sw $br && git rb $defbr && git pushf"
-	pushf = push -f
+	pushf = push --force-with-lease
 	sync = "!git pull --rebase && git push"
 	syncf = "!git pull --rebase && git pushf"
 	rb = rebase
