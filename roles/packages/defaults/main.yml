@@ -17,4 +17,6 @@ apt_packages:
   - shellcheck
   - terminator
   - pkg-config
+  - g++
+  - python3-dev
   - lvm2
