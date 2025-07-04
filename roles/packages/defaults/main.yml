@@ -16,4 +16,5 @@ apt_packages:
   - exfatprogs
   - shellcheck
   - terminator
+  - pkg-config
   - lvm2
