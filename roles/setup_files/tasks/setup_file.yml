@@ -59,6 +59,7 @@
         state: link
       when: user_name != "root"
 
+    # FIXME: use synchronize module instead and ignore .git directories
     - name: Copy {{ setup_file_src }} to {{ setup_file_dest }}
       copy:
         src: "{{ setup_file_src }}"
