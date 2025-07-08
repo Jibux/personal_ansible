@@ -17,6 +17,8 @@ apt_packages:
   - shellcheck
   - terminator
   - gparted
+  - nvme-cli
+  - smartmontools
   - pkg-config
   - g++
   - python3-dev
