@@ -16,6 +16,7 @@ apt_packages:
   - exfatprogs
   - shellcheck
   - terminator
+  - gparted
   - pkg-config
   - g++
   - python3-dev
