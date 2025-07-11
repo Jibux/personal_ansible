@@ -1,0 +1,3 @@
+[submodule "personal_ansible_secrets"]
+	path = personal_ansible_secrets
+	url = git@github.com:Jibux/personal_ansible_secrets.git
