@@ -8,3 +8,10 @@
     group: root
   notify:
     - Restart autofs
+
+- name: Copy credentials file
+  copy:
+    src: "{{ autofs_item.credentials.src }}"
+    dest: "{{ autofs_item.credentials.dest }}"
+    mode: 0400
+  no_log: true
