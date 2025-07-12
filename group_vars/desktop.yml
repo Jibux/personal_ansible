@@ -74,7 +74,7 @@ setup_autofs:
   - src: nas
     name: nas
     type: cifs
-    credentials:
+    credentials_file:
       src: "{{ secrets_path }}/nas/credentials"
       dest: /root/.autofs-nas-cred
     uid: 1000

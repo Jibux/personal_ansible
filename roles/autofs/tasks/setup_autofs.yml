@@ -11,7 +11,7 @@
 
 - name: Copy credentials file
   copy:
-    src: "{{ autofs_item.credentials.src }}"
-    dest: "{{ autofs_item.credentials.dest }}"
+    src: "{{ autofs_item.credentials_file.src }}"
+    dest: "{{ autofs_item.credentials_file.dest }}"
     mode: 0400
   no_log: true
