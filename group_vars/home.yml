@@ -15,6 +15,13 @@ symlinks:
   - src: /data/Music
   - src: /data
 
+setup_crypttabs:
+  - name: hdd_crypt
+    backing_device: UUID=d91cdf91-95fe-40a5-bfd8-3678536b6387
+    password_file:
+      src: "{{ secrets_path }}/luks/hdd_crypt_password"
+      dest: "/root/.hdd_crypt.key"
+
 setup_mounts:
   #- src: /dev/mapper/hdd-log
   #  dest: /var/log

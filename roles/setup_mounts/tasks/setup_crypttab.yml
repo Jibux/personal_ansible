@@ -1,0 +1,17 @@
+---
+- no_log: "{{ secure_log|d(true)|bool }}"
+  block:
+    - name: Copy {{ crypttab_item.name }} encryption password
+      copy:
+        src: "{{ crypttab_item.password_file.src }}"
+        dest: "{{ crypttab_item.password_file.dest }}"
+        mode: "0400"
+        owner: root
+        group: root
+
+    - name: Setup {{ crypttab_item.name }} crypttab
+      community.general.crypttab:
+        name: "{{ crypttab_item.name }}"
+        backing_device: "{{ crypttab_item.backing_device }}"
+        password: "{{ crypttab_item.password_file.dest }}"
+        state: present
