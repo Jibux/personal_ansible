@@ -1,5 +1,11 @@
 ---
 - include_tasks:
+    file: setup_crypttab.yml
+  loop: "{{ setup_crypttabs }}"
+  loop_control:
+    loop_var: crypttab_item
+
+- include_tasks:
     file: setup_mount.yml
   loop: "{{ setup_mounts }}"
   loop_control:
