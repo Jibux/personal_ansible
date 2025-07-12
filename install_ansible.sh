@@ -11,7 +11,23 @@ fail()
 }
 
 
+setup_ansible_vault_password()
+{
+	local file_path="$HOME/.personal_ansible_vault_password"
+	local vault_pass
+
+	[ -f "$file_path" ] && echo "Vault password file already present" && return 0
+
+	read -rs -p "Personal ansible vault password: " vault_pass ; echo
+	echo "$vault_pass" > "$file_path"
+	chmod 400 "$file_path"
+	return 0
+}
+
+
 trap fail ERR
+
+setup_ansible_vault_password
 
 SCRIPT_ROOT_PATH="$(dirname "$(realpath "$0")")"
 VENV_DIR="$SCRIPT_ROOT_PATH/.venv"
