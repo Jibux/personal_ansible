@@ -1,11 +1,11 @@
 ---
 - include_tasks:
-    file: firefox_no_snap.yml
+    file: packages_no_snap.yml
     apply:
       tags:
-        - firefox_no_snap
+        - packages_no_snap
   tags:
-      - firefox_no_snap
+      - packages_no_snap
 
 - name: Install packages
   apt:

@@ -1,0 +1,73 @@
+---
+- name: APT preferences firefox
+  copy:
+    dest: /etc/apt/preferences.d/firefox-no-snap
+    content: |
+      # Managed by ansible
+      Package: firefox*
+      Pin: release o=Ubuntu*
+      Pin-Priority: -1
+      Package: firefox*
+      Pin: release o=LP-PPA-mozillateam
+      Pin-Priority: -1
+      Package: firefox*
+      Pin: origin packages.mozilla.org
+      Pin-Priority: 1000
+    owner: root
+    group: root
+    mode: "0444"
+
+- name: APT preferences thunderbird
+  copy:
+    dest: /etc/apt/preferences.d/thunderbird-no-snap
+    content: |
+      # Managed by ansible
+      Package: thunderbird*
+      Pin: release o=Ubuntu*
+      Pin-Priority: -1
+      Package: thunderbird*
+      # FIXME: Use packages.mozzila.org when https://bugzilla.mozilla.org/show_bug.cgi?id=1893603 is done
+      Pin: release o=LP-PPA-mozillateam
+      Pin-Priority: 1000
+    owner: root
+    group: root
+    mode: "0444"
+
+- name: APT key packages.mozilla.org
+  ansible.builtin.get_url:
+    url: https://packages.mozilla.org/apt/repo-signing-key.gpg
+    dest: /etc/apt/keyrings/packages.mozilla.org.asc
+
+- name: APT repo packages.mozzila.org
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main"
+    filename: mozzila-org
+
+# FIXME: remove this when https://bugzilla.mozilla.org/show_bug.cgi?id=1893603 is done
+- name: Add Mozzilateam ppa
+  shell:
+    cmd: (add-apt-repository --list | grep -q https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/) || add-apt-repository -y ppa:mozillateam/ppa
+
+- name: Remove firefox snap package
+  community.general.snap:
+    name: firefox
+    state: absent
+  notify:
+    - Purge firefox
+
+- name: Remove thunderbird snap package
+  community.general.snap:
+    name: firefox
+    state: absent
+  notify:
+    - Purge thunderbird
+
+- name: Flush handlers
+  meta: flush_handlers
+
+- name: Install firefox and thunderbird from APT repository
+  ansible.builtin.apt:
+    name:
+      - firefox
+      - thunderbird
+    state: latest
