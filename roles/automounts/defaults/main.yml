@@ -1,0 +1,4 @@
+---
+setup_automounts: []
+automount_packages:
+  - cifs-utils

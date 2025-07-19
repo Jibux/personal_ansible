@@ -1,0 +1,17 @@
+[Unit]
+Description=Mount {{ automount_item_name }}
+Before=remote-fs.target
+{% if automount_item.pre_mount_service is defined %}
+After={{ automount_item_pre_mount_service_name }}
+Requires={{ automount_item_pre_mount_service_name }}
+{% endif %}
+
+[Mount]
+What={{ automounts_group.src }}/{{ automount_item.src }}
+Where={{ automount_item_mount_path }}
+Type={{ automounts_group.type }}
+Options={{ automount_item_mount_options|join(',') }}
+TimeoutSec={{ automount_item_mount_timeout }}
+
+[Install]
+WantedBy=multi-user.target

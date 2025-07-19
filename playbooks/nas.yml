@@ -2,4 +2,4 @@
 - hosts: desktop
   become: true
   roles:
-    - role: autofs
+    - role: nas

@@ -70,24 +70,30 @@ etc_hosts:
     names:
       - nas
 
-setup_autofs:
-  - src: nas
+setup_automounts:
+  - src: //nas
     name: nas
     type: cifs
     credentials_file:
       src: "{{ secrets_path }}/nas/credentials"
-      dest: /root/.autofs-nas-cred
-    uid: 1000
-    gid: 1000
-    mode: rw
+      dest: /root/.nas-cred
+    mount_options:
+      - rw
+      - uid=1000
+      - gid=1000
     mounts:
-      - name: nas_media
+      - name: media
         src: JIBUX-MEDIA
-      - name: nas_archives
+      - name: archives
         src: JIBUX-ARCHIVES
-      - name: nas_data
+      - name: data
         src: JIBUX-DATA
-      - name: nas_family
+      - name: family
         src: JIBUX-FAMILY
-      - name: nas_agathe
+      - name: agathe
         src: AGATHE
+      - name: test
+        src: Test
+        pre_mount_service:
+          name: unlock-synology-volume
+          argument: Test

@@ -1,0 +1,9 @@
+---
+- name: Unlock synology volume systemd service file
+  copy:
+    src: unlock-synology-volume@.service
+    dest: "{{ systemd_files_path }}/unlock-synology-volume@.service"
+    owner: root
+    group: root
+    mode: "0444"
+  notify: Daemon reload

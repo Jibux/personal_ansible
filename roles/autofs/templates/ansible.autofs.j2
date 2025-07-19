@@ -1,3 +1,0 @@
-{%- for autofs_item in setup_autofs %}
-/mnt/{{ autofs_item.name }} /etc/auto.{{ autofs_item.name }} --ghost,--timeout=60
-{% endfor %}
