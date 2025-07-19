@@ -2,3 +2,4 @@
 setup_automounts: []
 automount_packages:
   - cifs-utils
+systemd_files_path: /etc/systemd/system

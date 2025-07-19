@@ -2,7 +2,7 @@
 Description=Automount {{ automount_item_name }}
 
 [Automount]
-Where="/mnt/{{ automount_item_name }}"
+Where={{ automount_item_mount_path }}
 TimeoutIdleSec="{{ automounts_group.timeout | d(600) }}"
 
 [Install]

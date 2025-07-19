@@ -1,15 +1,17 @@
 ---
-- name: Set escaped-name
+- name: Set {{ automount_item_name }} mount escaped name
   set_fact:
-    automount_item_mount_name: "{{ mount_root|regex_replace('^/*(.*)$', '\\1')|replace('-', '\\x2d')|replace('/', '-') }}-{{ automount_item_name_escaped }}"
+    automount_item_mount_name: "{{ automount_item_mount_path|regex_replace('^/*(.*)$', '\\1')|replace('-', '\\x2d')|replace('/', '-') }}"
 
-- debug:
-    var: automount_item_mount_name
+- name: Set {{ automount_item_name }} pre-mount service name
+  set_fact:
+    automount_item_pre_mount_service_name: "{{ automount_item_mount_name }}-pre-mount.service"
+  when: automount_item.pre_mount_script is defined
 
 - name: Systemd {{ automount_item_name }} mount file
   template:
     src: automount_item.mount.j2
-    dest: "/etc/systemd/system/{{ automount_item_name }}.mount"
+    dest: "{{ systemd_files_path }}/{{ automount_item_mount_name }}.mount"
     owner: root
     group: root
     mode: "0444"
@@ -18,7 +20,7 @@
 - name: Systemd {{ automount_item_name }} automount file
   template:
     src: automount_item.automount.j2
-    dest: "/etc/systemd/system/{{ automount_item_name }}.automount"
+    dest: "{{ systemd_files_path }}/{{ automount_item_mount_name }}.automount"
     owner: root
     group: root
     mode: "0444"
@@ -28,7 +30,7 @@
 - name: Systemd {{ automount_item_name }} pre-mount service file
   template:
     src: automount_item_pre-mount.service.j2
-    dest: "/etc/systemd/system/{{ automount_item_name }}-pre-mount.service"
+    dest: "{{ systemd_files_path }}/{{ automount_item_pre_mount_service_name }}"
     owner: root
     group: root
     mode: "0444"
@@ -39,18 +41,18 @@
 
 - name: Enable {{ automount_item_name }} pre-mount service
   systemd:
-    name: "{{ automount_item_name }}-pre-mount.service"
+    name: "{{ automount_item_pre_mount_service_name }}"
     enabled: true
   when: automount_item.pre_mount_script is defined
 
 - name: Enable {{ automount_item_name }} automount
   systemd:
-    name: "{{ automount_item_name }}.automount"
+    name: "{{ automount_item_mount_name }}.automount"
     enabled: true
 
 - name: Restart {{ automount_item_name }} automount
   systemd:
-    name: "{{ automount_item_name }}.automount"
+    name: "{{ automount_item_mount_name }}.automount"
     state: restarted
   when: systemd_automount.changed
   ignore_errors: true

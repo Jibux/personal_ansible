@@ -12,6 +12,5 @@
   loop_control:
     loop_var: automount_item
   vars:
-    automount_item_name: "{{ automounts_group.name }}-{{ automount_item.name }}"
-    automount_item_name_escaped: "{{ (automounts_group.name + '-' + automount_item.name)|replace('-', '\\x2d') }}"
-    mount_root: "/mnt"
+    automount_item_name: "{{ automounts_group.name }}_{{ automount_item.name }}"
+    automount_item_mount_path: "/mnt/{{ automounts_group.name }}_{{ automount_item.name }}"
