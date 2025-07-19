@@ -1,0 +1,56 @@
+---
+- name: Set escaped-name
+  set_fact:
+    automount_item_mount_name: "{{ mount_root|regex_replace('^/*(.*)$', '\\1')|replace('-', '\\x2d')|replace('/', '-') }}-{{ automount_item_name_escaped }}"
+
+- debug:
+    var: automount_item_mount_name
+
+- name: Systemd {{ automount_item_name }} mount file
+  template:
+    src: automount_item.mount.j2
+    dest: "/etc/systemd/system/{{ automount_item_name }}.mount"
+    owner: root
+    group: root
+    mode: "0444"
+  notify: Daemon reload
+
+- name: Systemd {{ automount_item_name }} automount file
+  template:
+    src: automount_item.automount.j2
+    dest: "/etc/systemd/system/{{ automount_item_name }}.automount"
+    owner: root
+    group: root
+    mode: "0444"
+  notify: Daemon reload
+  register: systemd_automount
+
+- name: Systemd {{ automount_item_name }} pre-mount service file
+  template:
+    src: automount_item_pre-mount.service.j2
+    dest: "/etc/systemd/system/{{ automount_item_name }}-pre-mount.service"
+    owner: root
+    group: root
+    mode: "0444"
+  notify: Daemon reload
+  when: automount_item.pre_mount_script is defined
+
+- meta: flush_handlers
+
+- name: Enable {{ automount_item_name }} pre-mount service
+  systemd:
+    name: "{{ automount_item_name }}-pre-mount.service"
+    enabled: true
+  when: automount_item.pre_mount_script is defined
+
+- name: Enable {{ automount_item_name }} automount
+  systemd:
+    name: "{{ automount_item_name }}.automount"
+    enabled: true
+
+- name: Restart {{ automount_item_name }} automount
+  systemd:
+    name: "{{ automount_item_name }}.automount"
+    state: restarted
+  when: systemd_automount.changed
+  ignore_errors: true

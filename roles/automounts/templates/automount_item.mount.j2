@@ -1,0 +1,15 @@
+[Unit]
+Description=Mount {{ automount_item_name }}
+{% if automount_item.pre_mount_script is defined %}
+After={{ automount_item_name }}-pre-mount.service
+Requires={{ automount_item_name }}-pre-mount.service
+{% endif %}
+
+[Mount]
+What={{ automounts_group.src }}/{{ automount_item.src }}
+Where=/mnt/{{ automount_item_name }}
+Type={{ automounts_group.type }}
+Options={{ automounts_group.mode }},uid={{ automounts_group.uid }},gid={{ automounts_group.gid }},credentials={{ automounts_group.credentials_file.dest }}
+
+[Install]
+WantedBy=multi-user.target

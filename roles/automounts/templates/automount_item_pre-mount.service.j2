@@ -1,0 +1,10 @@
+[Unit]
+Description=Pre-mount script for {{ automount_item_name }}
+Before={{ automount_item_name }}.mount
+
+[Service]
+Type=oneshot
+ExecStart={{ automount_item.pre_mount_script }}
+
+[Install]
+WantedBy=multi-user.target

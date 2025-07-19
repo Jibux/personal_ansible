@@ -4,4 +4,4 @@
   roles:
     - role: home_network
 
-- import_playbook: autofs.yml
+- import_playbook: automounts.yml
