@@ -1,0 +1,9 @@
+[Unit]
+Description=Automount {{ automount_item_name }}
+
+[Automount]
+Where={{ automount_item_mount_path }}
+TimeoutIdleSec={{ automount_item_idle_timeout }}
+
+[Install]
+WantedBy=multi-user.target

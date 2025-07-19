@@ -1,0 +1,11 @@
+---
+- name: Install automount packages
+  apt:
+    name: "{{ automount_packages }}"
+    state: latest
+
+- include_tasks:
+    file: setup_automounts.yml
+  loop: "{{ setup_automounts }}"
+  loop_control:
+    loop_var: automounts_group

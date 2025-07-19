@@ -1,0 +1,43 @@
+---
+- name: Set {{ automount_item_name }} mount escaped name
+  set_fact:
+    automount_item_mount_name: "{{ automount_item_mount_path|regex_replace('^/*(.*)$', '\\1')|replace('-', '\\x2d')|replace('/', '-') }}"
+
+- name: Set {{ automount_item_name }} pre-mount service name
+  set_fact:
+    automount_item_pre_mount_service_name: "{{ automount_item.pre_mount_service.name }}{{ service_argument }}.service"
+  vars:
+    service_argument: "{{ ('@' + automount_item.pre_mount_service.argument) if automount_item.pre_mount_service.argument is defined else ''}}"
+  when: automount_item.pre_mount_service is defined
+
+- name: Systemd {{ automount_item_name }} mount file
+  template:
+    src: automount_item.mount.j2
+    dest: "{{ systemd_files_path }}/{{ automount_item_mount_name }}.mount"
+    owner: root
+    group: root
+    mode: "0444"
+  notify: Daemon reload
+
+- name: Systemd {{ automount_item_name }} automount file
+  template:
+    src: automount_item.automount.j2
+    dest: "{{ systemd_files_path }}/{{ automount_item_mount_name }}.automount"
+    owner: root
+    group: root
+    mode: "0444"
+  notify: Daemon reload
+  register: systemd_automount
+
+- meta: flush_handlers
+
+- name: Enable {{ automount_item_name }} automount
+  systemd:
+    name: "{{ automount_item_mount_name }}.automount"
+    enabled: true
+
+- name: Restart {{ automount_item_name }} automount
+  systemd:
+    name: "{{ automount_item_mount_name }}.automount"
+    state: restarted
+  when: systemd_automount.changed
