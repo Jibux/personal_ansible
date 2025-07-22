@@ -1,11 +1,4 @@
 ---
-- name: Copy credentials file
-  copy:
-    src: "{{ automounts_group.credentials_file.src }}"
-    dest: "{{ automounts_group.credentials_file.dest }}"
-    mode: 0400
-  no_log: true
-
 - include_tasks:
     file: setup_automount.yml
   loop: "{{ automounts_group.mounts }}"
@@ -16,4 +9,4 @@
     automount_item_mount_path: "/mnt/{{ automounts_group.name }}_{{ automount_item.name }}"
     automount_item_idle_timeout: "{{ automount_item.idle_timeout|d(automounts_group.idle_timeout|d(600)) }}"
     automount_item_mount_timeout: "{{ automount_item.mount_timeout|d(automounts_group.mount_timeout|d(60)) }}"
-    automount_item_mount_options: "{{ automounts_group.mount_options|d([]) + ['credentials=' + automounts_group.credentials_file.dest] if automounts_group.credentials_file is defined else [] }}"
+    automount_item_mount_options: "{{ automounts_group.mount_options|d([]) + ['credentials=' + automounts_group.credentials_file] if automounts_group.credentials_file is defined else [] }}"

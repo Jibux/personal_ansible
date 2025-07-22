@@ -70,13 +70,14 @@ etc_hosts:
     names:
       - nas
 
+nas_volume_passwords_path: /root/.nas-volume-passwords
+nas_credentials_path: /root/.nas-cred
+
 setup_automounts:
   - src: //nas
     name: nas
     type: cifs
-    credentials_file:
-      src: "{{ secrets_path }}/nas/credentials"
-      dest: /root/.nas-cred
+    credentials_file: "{{ nas_credentials_path }}"
     mount_options:
       - rw
       - uid=1000
@@ -88,6 +89,9 @@ setup_automounts:
         src: JIBUX-ARCHIVES
       - name: data
         src: JIBUX-DATA
+        pre_mount_service:
+          name: unlock-synology-volume
+          argument: JIBUX-DATA
       - name: family
         src: JIBUX-FAMILY
       - name: agathe

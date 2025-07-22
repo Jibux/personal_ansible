@@ -1,0 +1,9 @@
+[Unit]
+Description=Unlock %i synology volume
+
+[Service]
+Type=oneshot
+ExecStart={{ unlock_synology_volume_python }} {{ unlock_synology_volume_script }} --credentials {{ nas_credentials_path }} --volume-passwords-file {{ nas_volume_passwords_path }} --volume %i
+
+[Install]
+WantedBy=multi-user.target
