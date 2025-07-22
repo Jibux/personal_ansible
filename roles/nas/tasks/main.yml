@@ -1,9 +1,57 @@
 ---
 - name: Unlock synology volume systemd service file
-  copy:
+  template:
     src: unlock-synology-volume@.service
     dest: "{{ systemd_files_path }}/unlock-synology-volume@.service"
     owner: root
     group: root
     mode: "0444"
   notify: Daemon reload
+  tags:
+    - systemd
+
+- name: Create synology_scripts_path dir
+  file:
+    path: "{{ synology_scripts_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+  tags:
+    - scripts
+
+- name: unlock-synology-volume script
+  copy:
+    src: unlock-synology-volume.py
+    dest: "{{ unlock_synology_volume_script }}"
+    owner: root
+    group: root
+    mode: "0500"
+  tags:
+    - scripts
+
+- name: Copy unlock-synology-volume requirements.txt
+  copy:
+    src: unlock-synology-volume_requirements.txt
+    dest: "{{ synology_scripts_path }}/requirements.txt"
+    owner: root
+    group: root
+    mode: "0400"
+  tags:
+    - venv
+
+- set_fact:
+    uv_bin_path: "{{ local_user_home }}/.local/bin/uv"
+  become: false
+  tags:
+    - venv
+
+- name: Setup venv
+  command: "{{ uv_bin_path }} venv --directory '{{ synology_scripts_path }}' --python 3.12"
+  tags:
+    - venv
+
+- name: Install script dependencies
+  command: "{{ uv_bin_path }} pip install -r '{{ synology_scripts_path }}/requirements.txt' --directory '{{ synology_scripts_path }}'"
+  tags:
+    - venv

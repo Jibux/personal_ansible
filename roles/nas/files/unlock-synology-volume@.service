@@ -1,9 +1,0 @@
-[Unit]
-Description=Unlock %i synology volume
-
-[Service]
-Type=oneshot
-ExecStart=bash -c "echo 'Unlock %i synology volume'"
-
-[Install]
-WantedBy=multi-user.target
