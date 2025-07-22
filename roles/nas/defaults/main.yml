@@ -1,0 +1,4 @@
+---
+synology_scripts_path: /opt/synology_scripts
+unlock_synology_volume_script: "{{ synology_scripts_path }}/unlock-synology-volume.py"
+unlock_synology_volume_python: "{{ synology_scripts_path }}/.venv/bin/python3"
