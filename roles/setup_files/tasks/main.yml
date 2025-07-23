@@ -57,7 +57,7 @@
   vars:
     setup_files: "{{ common_scripts + specific_scripts }}"
     setup_files_src_root: scripts
-    setup_files_dest_root: "{{ user_home_dir }}/bin"
+    setup_files_dest_root: "{{ local_user_home }}/bin"
   tags:
     - setup_files
     - scripts

@@ -2,7 +2,7 @@
 - include_tasks:
     file: setup_symlink.yml
   vars:
-    destination: "{{ symlink.dest_root | d(user_home_dir) }}/{{ symlink.dest_path | d(symlink.src | basename) }}"
+    destination: "{{ symlink.dest_root | d(local_user_home) }}/{{ symlink.dest_path | d(symlink.src | basename) }}"
   loop: "{{ symlinks }}"
   loop_control:
     loop_var: symlink

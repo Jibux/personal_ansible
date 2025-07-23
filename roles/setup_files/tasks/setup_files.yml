@@ -5,9 +5,8 @@
   loop_control:
     loop_var: setup_file
   vars:
-    # FIXME if tasks with become has been done before
-    user_name: "jibux"
-    home_dir: "/home/jibux"
+    user_name: "{{ local_user_name }}"
+    home_dir: "{{ local_user_home }}"
   when: not setup_file.root_only|d(false)
 
 - become: true
