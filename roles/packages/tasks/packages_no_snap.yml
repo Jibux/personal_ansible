@@ -69,5 +69,7 @@
   ansible.builtin.apt:
     name:
       - firefox
+      - firefox-l10n-fr
       - thunderbird
+      - thunderbird-locale-fr
     state: latest
