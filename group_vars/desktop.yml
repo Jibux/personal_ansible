@@ -94,6 +94,7 @@ setup_automounts:
         src: AGATHE
       - name: test
         src: Test
+        idle_timeout: 10
         pre_mount_service:
           name: unlock-synology-volume
           argument: Test
