@@ -57,7 +57,7 @@
 
 - name: Remove thunderbird snap package
   community.general.snap:
-    name: firefox
+    name: thunderbird
     state: absent
   notify:
     - Purge thunderbird
