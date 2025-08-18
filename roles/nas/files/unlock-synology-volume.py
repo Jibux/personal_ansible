@@ -10,7 +10,6 @@ import argparse
 import logging
 import subprocess
 import sys
-import time
 from pathlib import Path
 
 import requests
@@ -204,12 +203,8 @@ def main():
     ping_test(args.host)
     token = get_and_write_token(url, credentials)
     volume_action(url, token, volume_passwords, args.volume, args.action)
-    # FIXME: Find a way to do it more nicely
     if args.action == "decrypt":
         test_volume(url, token, args.volume)
-        sleep_sec = 2
-        logger.debug(f"Waiting {sleep_sec} second for volume to be ready")
-        time.sleep(sleep_sec)
 
 
 if __name__ == "__main__":
