@@ -2,7 +2,9 @@
 
 
 # Found api methods in nas:
-# Ex. cat /usr/syno/synoman/webapi/SYNO.Core.Share.lib |jq '.["SYNO.Core.Share.Crypto"]'
+# find /usr -name '*SYNO*lib' | sort
+# cat /usr/syno/synoman/webapi/SYNO.Core.Share.lib | jq 'keys'
+# cat /usr/syno/synoman/webapi/SYNO.Core.Share.lib |jq '.["SYNO.Core.Share.Crypto"]'
 
 import argparse
 import logging
@@ -89,10 +91,10 @@ def test_token(url, token):
     r = requests.get(f"{url}/webapi/entry.cgi", params, verify=False)
     data = parse_response(r)
     if request_succeeded(data):
-        logger.debug("Test succeeded")
+        logger.debug("Test token succeeded")
         return True
     else:
-        logger.debug("Test failed")
+        logger.debug("Test token failed")
         return False
 
 
@@ -152,6 +154,23 @@ def volume_action(url, token, volume_passwords, volume, action):
         fail(f"{action} volume {volume} failed!")
 
 
+def test_volume(url, token, volume):
+    params = {
+        "api": "SYNO.FileStation.List",
+        "version": "2",
+        "method": "list",
+        "folder_path": f"\"/{volume}\"",
+        "limit": 1,
+        "_sid": token,
+    }
+    r = requests.post(f"{url}/webapi/entry.cgi", params, verify=False)
+    data = parse_response(r)
+    if request_succeeded(data):
+        logger.info(f"Test volume {volume} succeeded")
+    else:
+        fail(f"Test volume {volume} failed!")
+
+
 def dict_keys_str(d: dict):
     return ", ".join(list(d.keys()))
 
@@ -187,6 +206,7 @@ def main():
     volume_action(url, token, volume_passwords, args.volume, args.action)
     # FIXME: Find a way to do it more nicely
     if args.action == "decrypt":
+        test_volume(url, token, args.volume)
         sleep_sec = 2
         logger.debug(f"Waiting {sleep_sec} second for volume to be ready")
         time.sleep(sleep_sec)
