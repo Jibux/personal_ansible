@@ -19,6 +19,7 @@
 	cif = commit --fixup
 	st = status
 	sethead = remote set-head origin -a
+	pclone = clone --filter=blob:limit=100k
 	last = log -1 HEAD
 	lasthash = log -n1 --format=format:"%H" HEAD
 	msghash = "!f() { git log --grep=\"^$1$\" -n1 --pretty=format:'%h'; }; f"
