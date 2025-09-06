@@ -1,0 +1,15 @@
+---
+- name: APT key apt.syncthing.net
+  ansible.builtin.get_url:
+    url: https://syncthing.net/release-key.gpg
+    dest: /etc/apt/keyrings/syncthing-archive-keyring.gpg
+
+- name: APT repo apt.syncthing.net
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable-v2"
+    filename: syncthing
+
+- name: Install syncthing
+  ansible.builtin.apt:
+    name: syncthing
+    state: latest

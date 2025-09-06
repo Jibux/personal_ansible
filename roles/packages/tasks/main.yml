@@ -7,6 +7,14 @@
   tags:
       - packages_no_snap
 
+- include_tasks:
+    file: syncthing.yml
+    apply:
+      tags:
+        - syncthing
+  tags:
+      - syncthing
+
 - name: Install packages
   apt:
     name: "{{ apt_packages }}"
