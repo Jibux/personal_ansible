@@ -94,6 +94,9 @@ setup_automounts:
           argument: JIBUX-DATA
       - name: family
         src: JIBUX-FAMILY
+        pre_mount_service:
+          name: unlock-synology-volume
+          argument: JIBUX-FAMILY
       - name: agathe
         src: AGATHE
         pre_mount_service:
