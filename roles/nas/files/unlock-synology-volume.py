@@ -5,6 +5,9 @@
 # find /usr -name '*SYNO*lib' | sort
 # cat /usr/syno/synoman/webapi/SYNO.Core.Share.lib | jq 'keys'
 # cat /usr/syno/synoman/webapi/SYNO.Core.Share.lib |jq '.["SYNO.Core.Share.Crypto"]'
+# Synology API documentation:
+# * https://global.download.synology.com/download/Document/Software/DeveloperGuide/Package/FileStation/All/enu/Synology_File_Station_API_Guide.pdf
+# * https://kb.synology.com/fr-fr/DG/DSM_Login_Web_API_Guide/1
 
 import argparse
 import logging
