@@ -73,3 +73,16 @@
       - thunderbird
       - thunderbird-locale-fr
     state: latest
+
+- name: Prevent unattended upgrades to use snap packages
+  copy:
+    content: |
+      # Managed by ansible
+      Unattended-Upgrade::Allowed-Origins {
+        "packages.mozilla.org:mozilla";
+        "LP-PPA-mozillateam:${distro_codename}";
+      };
+    dest: /etc/apt/apt.conf.d/51unattended-upgrades-no-snap
+    owner: root
+    group: root
+    mode: "0444"
