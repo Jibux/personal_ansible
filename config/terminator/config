@@ -2,7 +2,7 @@
   focus = mouse
   window_state = maximise
 [keybindings]
-  zoom_in = <Primary>KP_Add
+  zoom_in = <Primary>plus
   new_tab = <Shift>Down
   split_horiz = <Primary>parenright
   split_vert = <Primary>equal
