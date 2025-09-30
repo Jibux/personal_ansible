@@ -4,26 +4,22 @@
 [keybindings]
   zoom_in = <Primary>KP_Add
   new_tab = <Shift>Down
-  split_horiz = <Primary>minus
-  split_vert = <Primary>parenleft
+  split_horiz = <Primary>parenright
+  split_vert = <Primary>equal
   paste = <Alt>v
+  resize_left = <Primary><Shift><Alt>Left
+  resize_right = <Primary><Shift><Alt>Right
   move_tab_right = <Primary><Shift>Right
   move_tab_left = <Primary><Shift>Left
   next_tab = <Shift>Right
   prev_tab = <Shift>Left
   full_screen = F12
-  broadcast_off = None
-  broadcast_group = None
-  broadcast_all = None
-  help = None
 [profiles]
   [[default]]
     background_color = "#002b36"
     foreground_color = "#deddda"
     scrollback_lines = 10000000
     palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#9a9996:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3"
-    word_chars = '''"'()<>[]{}|:-.?%&,:'''
-    copy_on_selection = True
     title_transmit_bg_color = "#00222b"
 [layouts]
   [[default]]
