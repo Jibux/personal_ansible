@@ -1,6 +1,7 @@
 [global_config]
   focus = mouse
   window_state = maximise
+  putty_paste_style_source_clipboard = True
 [keybindings]
   zoom_in = <Primary>plus
   new_tab = <Shift>Down
