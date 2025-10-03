@@ -21,6 +21,7 @@
     foreground_color = "#deddda"
     scrollback_lines = 10000000
     palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#9a9996:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3"
+    copy_on_selection = True
     title_transmit_bg_color = "#00222b"
 [layouts]
   [[default]]
