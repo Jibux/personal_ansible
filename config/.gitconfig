@@ -55,6 +55,7 @@
 	diffw = diff -w
 	diffwo = diff --word-diff
 	diffst = diff --name-status
+	rmtag = "!f() { git tag -d \"$1\"; git push --delete origin \"refs/tags/$1\" ;}; f"
 [column]
 	ui = auto
 [commit]
