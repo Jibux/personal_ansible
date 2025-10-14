@@ -235,6 +235,15 @@ else
 	PS1="$WINDOW_TITLE"'${debian_chroot:+($debian_chroot)}\u@\h:\w'"$PS_SYMBOL "
 fi
 
+ruff_fmt()
+{
+	if [ $# -ne 1 ]; then
+		echo "Please specify path to format"
+		return 1
+	fi
+	ruff check --fix "$1" && ruff format "$1"
+}
+
 unset color_prompt force_color_prompt
 
 PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;}history -a"
