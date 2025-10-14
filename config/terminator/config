@@ -5,8 +5,8 @@
 [keybindings]
   zoom_in = <Primary>plus
   new_tab = <Shift>Down
-  split_horiz = <Primary>parenright
-  split_vert = <Primary>equal
+  split_horiz = <Primary>dead_circumflex
+  split_vert = <Primary>parenright
   paste = <Alt>v
   resize_left = <Primary><Shift><Alt>Left
   resize_right = <Primary><Shift><Alt>Right
