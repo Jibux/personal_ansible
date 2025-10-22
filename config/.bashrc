@@ -322,6 +322,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" || true  # This loads nvm bash_completion
 
 command -v direnv > /dev/null && eval "$(direnv hook bash)" || true
+command -v fzf > /dev/null && eval "$(fzf --bash)"
 
 if [ -e /home/linuxbrew/.linuxbrew/bin/brew ]; then
 # BEGIN ANSIBLE MANAGED BLOCK: linuxbrew
