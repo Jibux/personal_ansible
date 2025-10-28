@@ -1,6 +1,8 @@
 ---
 apt_packages:
   - git
+  - xsel
+  - xclip
   - libpoppler-cpp-dev
   - vim
   - vim-common
