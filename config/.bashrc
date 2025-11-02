@@ -322,7 +322,21 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" || true  # This loads nvm bash_completion
 
 command -v direnv > /dev/null && eval "$(direnv hook bash)" || true
-command -v fzf > /dev/null && eval "$(fzf --bash)"
+
+if command -v fzf > /dev/null; then
+	eval "$(fzf --bash)"
+	# bind Ctrl+f to execute __fzf_history__
+	bind -m emacs-standard -x '"\C-f": __fzf_history__'
+	bind -m vi-command -x '"\C-f": __fzf_history__'
+	bind -m vi-insert -x '"\C-f": __fzf_history__'
+	# revert ctrl+r to original bash behavior
+	bind '"\C-r": reverse-search-history'
+
+	export FZF_CTRL_R_OPTS="
+	  --bind 'ctrl-y:execute-silent(echo -n {2..} | xclip -sel clip)+abort'
+	  --color header:italic
+	  --header 'Press CTRL-Y to copy command into clipboard'"
+fi
 
 if [ -e /home/linuxbrew/.linuxbrew/bin/brew ]; then
 # BEGIN ANSIBLE MANAGED BLOCK: linuxbrew
