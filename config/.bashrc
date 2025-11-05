@@ -332,10 +332,26 @@ if command -v fzf > /dev/null; then
 	# revert ctrl+r to original bash behavior
 	bind '"\C-r": reverse-search-history'
 
+	export FZF_DEFAULT_OPTS="
+	  --no-height
+	  --walker-skip .git,.venv,node_modules,.cache,.ruff_cache
+	  --select-1 --exit-0
+	"
+
+	export FZF_CTRL_T_OPTS="
+	  --preview 'bat -n --color=always {}'
+	  --bind page-up:preview-page-up,page-down:preview-page-down
+	"
+
 	export FZF_CTRL_R_OPTS="
 	  --bind 'ctrl-y:execute-silent(echo -n {2..} | xclip -sel clip)+abort'
 	  --color header:italic
-	  --header 'Press CTRL-Y to copy command into clipboard'"
+	  --header 'Press CTRL-Y to copy command into clipboard'
+	"
+
+	export FZF_ALT_C_OPTS="
+	  --preview 'tree -C {} | head -200'
+	"
 fi
 
 if [ -e /home/linuxbrew/.linuxbrew/bin/brew ]; then
