@@ -39,6 +39,12 @@ if ! command -v curl >/dev/null; then
 	sudo apt update && sudo apt install curl
 fi
 
+if command -v brew >/dev/null; then
+	brew update
+elif [ ! -d /home/linuxbrew ]; then
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
 if command -v uv >/dev/null; then
 	uv self update
 else
