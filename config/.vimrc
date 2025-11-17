@@ -39,7 +39,6 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'glench/vim-jinja2-syntax'
-Plug 'kien/ctrlp.vim'
 " Use + and _
 Plug 'terryma/vim-expand-region'
 Plug 'dense-analysis/ale'
