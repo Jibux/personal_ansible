@@ -248,8 +248,12 @@ noremap [6^ :tabnext<CR>
 noremap [5^ :tabprevious<CR>
 noremap <C-t> :tabnew<CR>
 
-" Launch fzf file selector
-noremap <C-p> :FZF<CR>
+
+" fzf
+" Launch file selector
+noremap <C-p> :Files<CR>
+
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
 
 
 " Source a global configuration file if available
