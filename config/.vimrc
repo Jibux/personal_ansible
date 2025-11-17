@@ -248,6 +248,10 @@ noremap [6^ :tabnext<CR>
 noremap [5^ :tabprevious<CR>
 noremap <C-t> :tabnew<CR>
 
+" Launch fzf file selector
+noremap <C-p> :FZF<CR>
+
+
 " Source a global configuration file if available
 if filereadable("/etc/vim/vimrc.local")
 	source /etc/vim/vimrc.local
