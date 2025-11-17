@@ -56,6 +56,9 @@ Plug 'google/vim-jsonnet'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
+" makes sure that you have the latest binary
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 " :PlugInstall to install plugins
 " :PlugUpdate to update
