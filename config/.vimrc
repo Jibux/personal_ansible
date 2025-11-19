@@ -317,12 +317,6 @@ syntax keyword SpellBad ERROR
 autocmd BufNewFile,BufRead *.vue set syntax=html
 autocmd BufNewFile,BufRead *.ts set syntax=javascript
 
-let g:ctrlp_custom_ignore = {
-	\ 'dir':  '\v[\/]\.(git|hg|svn)$',
-	\ 'file': '\v\.(exe|so|dll|flac|mp3|m4a|jpg|jpeg|png|gif)$',
-	\ 'link': 'some_bad_symbolic_links',
-\}
-
 " Color column
 set colorcolumn=81
 "call matchadd('ColorColumn', '\%81v', 100) "set column nr
