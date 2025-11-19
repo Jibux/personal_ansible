@@ -255,6 +255,29 @@ noremap <C-p> :Files<CR>
 
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
 
+function! s:open_args(lines)
+  " Add each file to the arglist
+  for line in a:lines
+    " Skip empty lines
+    if !empty(line)
+      execute 'argadd' fnameescape(line)
+    endif
+  endfor
+
+  " Open the first file in the arglist
+  if argc() > 0
+    argument 1
+  endif
+
+endfunction
+
+" override the enter behaviour to use arglist instead of buffer
+let g:fzf_action = {
+  \ 'enter': function('s:open_args'),
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
 
 " Source a global configuration file if available
 if filereadable("/etc/vim/vimrc.local")
