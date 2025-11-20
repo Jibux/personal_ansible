@@ -352,6 +352,8 @@ if command -v fzf > /dev/null; then
 	export FZF_ALT_C_OPTS="
 	  --preview 'tree -C {} | head -200'
 	"
+
+	alias gsw='git switch $(git branch | fzf)'
 fi
 
 if [ -e /home/linuxbrew/.linuxbrew/bin/brew ]; then
