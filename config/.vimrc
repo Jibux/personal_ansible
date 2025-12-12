@@ -75,6 +75,8 @@ let g:airline_theme='solarized'
 " turn on this option as well
 "set background=dark
 
+let g:table_mode_verbose=0
+
 " Uncomment the following to have Vim jump to the last position when
 " reopening a file
 if has("autocmd")
@@ -114,7 +116,7 @@ highlight Search cterm=NONE ctermfg=Black ctermbg=yellow
 "set hidden         " Hide buffers when they are abandoned
 set mouse=a		" Enable mouse usage (all modes)
 set number
-set shortmess=at
+set shortmess=atO
 set wildignore=*.o,*.obj,*.bak,*.exe
 
 set nostartofline
