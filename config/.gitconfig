@@ -7,6 +7,8 @@
 [init]
 	defaultBranch = main
 [alias]
+	addm = "!git ls-files --deleted --modified --other --exclude-standard | fzf -0 -m --preview 'git diff --color=always {-1}' | xargs -r git add"
+	addmp = "!git ls-files --deleted --modified --exclude-standard | fzf -0 -m --preview 'git diff --color=always {-1}' | xargs -r -o git add -p"
 	co = checkout
 	sw = "!f() { if [ $# -eq 0 ] && command -v fzf >/dev/null; then git branch | grep -v '^[*+]' | awk '{print $1}' | fzf -0 --preview 'git show --color=always {-1}' | xargs -r git switch; else git switch \"$@\"; fi; }; f"
 	br = branch
