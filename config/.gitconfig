@@ -17,7 +17,7 @@
 	ci = commit
 	cia = commit --amend
 	ciaa = commit --amend -a
-	cif = commit --fixup
+	cif = "!f() { if [ $# -eq 0 ] && command -v fzf >/dev/null; then git log --oneline --no-decorate --no-merges | fzf -0 --preview 'git show --color=always --format=oneline {1}' | awk '{print $1}' | xargs -r git commit --fixup; else git commit --fixup \"$@\"; fi; }; f"
 	st = status
 	sethead = remote set-head origin -a
 	pclone = clone --filter=blob:limit=100k
