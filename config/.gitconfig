@@ -9,7 +9,7 @@
 [alias]
 	# Comment this until I change my habbit to use git switch
 	# co = checkout
-	sw = switch
+	sw = "!f() { if [ $# -eq 0 ] && command -v fzf >/dev/null; then git branch | grep -v '^[*+]' | awk '{print $1}' | fzf -0 --preview 'git show --color=always {-1}' | xargs -r git switch; else git switch \"$@\"; fi; }; f"
 	br = branch
 	bra = branch -a
 	brr = branch -r
