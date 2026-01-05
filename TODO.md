@@ -5,6 +5,7 @@
 * ripgrep
 * bat
 * fzf
+* witr -> information about running processes
 
 ## jibux_svc
 
