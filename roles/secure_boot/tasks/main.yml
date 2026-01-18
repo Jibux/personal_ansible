@@ -1,0 +1,17 @@
+---
+- name: mok dir
+  file:
+    path: "{{ local_user_home }}/mok"
+    state: directory
+    mode: "0500"
+
+- name: Setup MOK to sign kernel module
+  copy:
+    src: "{{ secrets_path }}/mok/{{ item }}"
+    dest: "{{ local_user_home }}/mok/{{ item }}"
+    mode: "0400"
+  loop:
+    - MOK.der
+    - MOK.pem
+    - MOK.priv
+    - password

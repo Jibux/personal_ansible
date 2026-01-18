@@ -1,0 +1,4 @@
+---
+- hosts: secure_boot
+  roles:
+    - role: secure_boot
