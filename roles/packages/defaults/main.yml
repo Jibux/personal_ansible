@@ -5,6 +5,7 @@ apt_packages:
   - xclip
   - tree
   - libpoppler-cpp-dev
+  - htop
   - vim
   - vim-common
   - vim-gtk3
