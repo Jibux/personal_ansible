@@ -332,7 +332,7 @@ function CopyModeToggle()
 endfunction
 
 noremap	<F3> :call CopyModeToggle() <CR>
-nnoremap <C-LeftMouse> :call CopyModeToggle()<CR>
+"nnoremap <C-LeftMouse> :call CopyModeToggle()<CR>
 
 " NERDTree
 noremap <F7> :NERDTreeToggle <CR>
