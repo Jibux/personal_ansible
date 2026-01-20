@@ -36,3 +36,4 @@ brew_exec_venv_path: '{{ brew_bin_venv_path|dirname }}'
 brews:
   - formulae: bat
   - formulae: fzf
+  - formulae: ripgrep
