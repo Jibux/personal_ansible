@@ -29,6 +29,16 @@
   tags:
       - brew
 
+- become: false
+  block:
+    - include_tasks:
+        file: rust.yml
+        apply:
+          tags:
+            - rust
+      tags:
+          - rust
+
 - name: Clean
   apt:
     autoclean: true
