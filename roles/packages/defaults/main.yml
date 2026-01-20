@@ -28,3 +28,11 @@ apt_packages:
   - python3-dev
   - lvm2
   - exiftool
+
+brew_bin_real_path_default: /home/linuxbrew/.linuxbrew/bin/brew
+brew_bin_venv_path: '{{ project_root_path }}/.venv/bin/brew'
+brew_exec_venv_path: '{{ brew_bin_venv_path|dirname }}'
+
+brews:
+  - formulae: bat
+  - formulae: fzf

@@ -1,0 +1,31 @@
+---
+# Brew will run sudo -k to reset sudo session to avoid security issues
+# Run a wrapper for brew to use a different sudo session than the one used by ansible
+# See: https://github.com/Homebrew/brew/issues/17912
+- name: Fix brew
+  become: no
+  block:
+    - name: Find real brew bin
+      command: which -a brew
+      register: which_brew
+      ignore_errors: true
+
+    - name: Set brew bin
+      set_fact:
+        brew_bin_real_path: "{{which_brew.stdout|trim|split('\n')|reject('==', brew_bin_venv_path)|first}}"
+      ignore_errors: true
+
+    - debug:
+        var: brew_bin_real_path
+
+    - name: Fix brew sudo reset
+      copy:
+        content: |
+          #!/bin/sh
+          exec setsid "{{brew_bin_real_path|d(brew_bin_real_path_default)}}" "$@"
+        dest: '{{brew_bin_venv_path}}'
+        mode: 0555
+
+- include_tasks:
+    file: install_brew.yml
+  loop: "{{ brews }}"
