@@ -323,6 +323,12 @@ export NVM_DIR="$HOME/.nvm"
 
 command -v direnv > /dev/null && eval "$(direnv hook bash)" || true
 
+if [ -e /home/linuxbrew/.linuxbrew/bin/brew ]; then
+# BEGIN ANSIBLE MANAGED BLOCK: linuxbrew
+eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+# END ANSIBLE MANAGED BLOCK: linuxbrew
+fi
+
 if command -v fzf > /dev/null; then
 	eval "$(fzf --bash)"
 	# bind Ctrl+f to execute __fzf_history__
@@ -352,11 +358,5 @@ if command -v fzf > /dev/null; then
 	export FZF_ALT_C_OPTS="
 	  --preview 'tree -C {} | head -200'
 	"
-fi
-
-if [ -e /home/linuxbrew/.linuxbrew/bin/brew ]; then
-# BEGIN ANSIBLE MANAGED BLOCK: linuxbrew
-eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-# END ANSIBLE MANAGED BLOCK: linuxbrew
 fi
 
