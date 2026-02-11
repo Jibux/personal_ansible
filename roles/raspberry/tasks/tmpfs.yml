@@ -1,0 +1,39 @@
+---
+- name: Add azlux apt key
+  apt_key:
+    url: https://azlux.fr/repo.gpg
+    keyring: /usr/share/keyrings/azlux-archive-keyring.gpg
+    state: present
+
+- name: Add azlux repo
+  apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] https://packages.azlux.fr/debian/ stable main"
+    filename: azlux.list
+    state: present
+
+- name: Install log2ram
+  apt:
+    name: log2ram
+    state: latest
+  notify:
+    - Reboot
+
+- name: log2ram config
+  copy:
+    src: log2ram.conf
+    dest: /etc/
+    mode: "0444"
+    owner: root
+    group: root
+  notify:
+    - Reboot
+
+- name: Setup /tmp as tmpfs
+  lineinfile:
+    dest: /etc/fstab
+    regexp: ^tmpfs /tmp
+    line: tmpfs /tmp tmpfs defaults,noatime,nosuid,size=10m 0 0
+  notify:
+    - Reboot
+
+- meta: flush_handlers

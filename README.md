@@ -43,3 +43,9 @@ See [README.md](roles/mega/README.md).
 ansible-playbook playbooks/mega.yml -l jibux-taf -D
 ```
 
+## Home server
+
+```bash
+ansible-playbook playbooks/home_server_all.yml -D
+```
+

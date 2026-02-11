@@ -1,0 +1,34 @@
+---
+- name: Set postfix mailname
+  debconf:
+    name: postfix
+    question: postfix/mailname
+    value: "{{ home_server_name }}"
+    vtype: select
+
+- name: Set postfix main_mailer_type
+  debconf:
+    name: postfix
+    question: postfix/main_mailer_type
+    value: Local only
+    vtype: select
+
+- name: Install postfix
+  apt:
+    name:
+      - postfix
+      - mailutils
+    state: present
+
+- name: Reconfigure postfix
+  lineinfile:
+    path: /etc/postfix/main.cf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+    - { regexp: '^inet_interfaces', line: 'inet_interfaces = loopback-only' }
+    - { regexp: '^inet_protocols', line: 'inet_protocols = ipv4' }
+    - { regexp: '^default_transport', line: 'default_transport = error' }
+    - { regexp: '^relay_transport', line: 'relay_transport = error' }
+  notify:
+    - "Restart postfix"

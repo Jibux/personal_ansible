@@ -1,14 +1,15 @@
 ---
 - name: Remove some users
-  user: name={{ item.name }} state=absent remove=yes
-  with_items:
-    - { name: 'pi' }
+  user: name={{ item }} state=absent remove=yes
+  loop:
+    - 'pi'
+    - 'ubuntu'
 
 - name: Remove some groups
-  group: name={{ item.name }} state=absent
-  with_items:
-    - { name: 'pi' }
-
+  group: name={{ item }} state=absent
+  loop:
+    - 'pi'
+    - 'ubuntu'
 
 - name: Disable Wifi (stop and disable services)
   systemd: state=stopped enabled=no name={{ item }}
@@ -19,3 +20,11 @@
 
 - name: Disable Wifi (if changed, requires reboot)
   copy: src=raspi-blacklist.conf dest=/etc/modprobe.d/raspi-blacklist.conf owner=root group=root mode=0644
+
+- include_tasks:
+    file: tmpfs.yml
+    apply:
+      tags:
+        - tmpfs
+  tags:
+    - tmpfs
