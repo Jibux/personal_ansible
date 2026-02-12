@@ -85,8 +85,6 @@ setup_automounts:
     mounts:
       - name: media
         src: JIBUX-MEDIA
-      - name: archives
-        src: JIBUX-ARCHIVES
       - name: data
         src: JIBUX-DATA
         pre_mount_service:
@@ -107,9 +105,3 @@ setup_automounts:
         pre_mount_service:
           name: unlock-synology-volume
           argument: AGATHE
-      #- name: test
-      #  src: Test
-      #  idle_timeout: 10
-      #  pre_mount_service:
-      #    name: unlock-synology-volume
-      #    argument: Test
