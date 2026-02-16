@@ -1,16 +1,27 @@
 ---
+- name: Import NAS credentials
+  include_vars:
+    file: "{{ secrets_path }}/nas/credentials.yml"
+    name: nas_credentials
+
 - name: Credential files
   copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    dest: "{{ nas_credentials_path }}"
     owner: root
     group: root
     mode: "0400"
-  loop:
-    - src: "{{ secrets_path }}/nas/credentials"
-      dest: "{{ nas_credentials_path }}"
-    - src: "{{ secrets_path }}/nas/volume-passwords"
-      dest: "{{ nas_volume_passwords_path }}"
+    content: |
+      username={{ nas_credentials.admin.username }}
+      password={{ nas_credentials.admin.password }}
+  no_log: "{{ secure_log|d(true)|bool }}"
+
+- name: Volume passwords
+  copy:
+    src: "{{ secrets_path }}/nas/volume-passwords"
+    dest: "{{ nas_volume_passwords_path }}"
+    owner: root
+    group: root
+    mode: "0400"
   no_log: "{{ secure_log|d(true)|bool }}"
 
 - name: Unlock synology volume systemd service file

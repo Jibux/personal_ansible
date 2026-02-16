@@ -28,3 +28,9 @@ setup_mounts:
   #  state: present
   - src: /dev/mapper/hdd-data
     dest: /data
+
+rclone_config_load_list:
+  - name: pcloud
+    encrypted: true
+    encrypted_path: "Encrypted"
+  - name: nas

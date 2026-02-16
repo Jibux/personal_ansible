@@ -1,0 +1,13 @@
+---
+- include_tasks:
+    file: load_rclone_config.yml
+  loop: "{{ rclone_config_load_list }}"
+
+- name: Execute role stefangweichinger.rclone
+  import_role:
+    name: stefangweichinger.ansible_rclone
+  vars:
+    rclone_config_owner:
+       OWNER: "{{ local_user_name }}"
+       GROUP: "{{ local_user_name }}"
+    rclone_config_location: "{{ local_user_home }}/.config/rclone/rclone.conf"

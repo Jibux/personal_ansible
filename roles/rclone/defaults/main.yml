@@ -1,0 +1,5 @@
+---
+rclone_configs:
+  - name: local
+    properties:
+      type: local

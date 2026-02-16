@@ -1,0 +1,6 @@
+---
+name: pcloud
+properties:
+  type: pcloud
+  hostname: eapi.pcloud.com
+  token: "{{ lookup('file', secrets_path + '/pcloud/token')|from_json|to_json }}"

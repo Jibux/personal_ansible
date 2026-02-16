@@ -1,0 +1,22 @@
+---
+- name: Load vars for {{ item.name }}
+  include_vars:
+    file: "{{ item.name }}.yml"
+    name: item_data
+
+- name: Set rclone config for {{ item.name }}
+  set_fact:
+    rclone_configs: "{{ rclone_configs + [item_data] }}"
+
+- name: Add encrypted config
+  set_fact:
+    rclone_configs: "{{ rclone_configs + [encrypted_config] }}"
+  vars:
+    encrypted_config:
+      name: "{{ item.name }}_encrypted"
+      properties:
+        type: crypt
+        remote: "{{ item.name }}:{{ item.encrypted_path|d('') }}"
+        password: "{{ lookup('file', secrets_path + '/' + item.encrypted_rclone_password_path|d('rclone/password')) }}"
+        password2: "{{ lookup('file', secrets_path + '/' + item.encrypted_rclone_password2_path|d('rclone/password2')) }}"
+  when: "item.encrypted|d(false)"
