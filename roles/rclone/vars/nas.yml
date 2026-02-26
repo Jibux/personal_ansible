@@ -1,7 +1,7 @@
 ---
 name: nas
 properties:
-  type: cifs
+  type: smb
   host: nas
-  smb_user: "{{ (lookup('file', secrets_path + '/nas/credentials.yml')|from_yaml).admin.username }}"
-  smb_pass: "{{ (lookup('file', secrets_path + '/nas/credentials.yml')|from_yaml).admin.password }}"
+  user: "{{ (lookup('file', secrets_path + '/nas/credentials.yml')|from_yaml).admin.username }}"
+  pass: "{{ (lookup('file', secrets_path + '/nas/credentials.yml')|from_yaml).admin.password_obscure }}"
