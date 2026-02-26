@@ -153,7 +153,7 @@ do
 		cmd2="mkdir -p '$path$destinationPath' && "
 	fi
 
-	cmd=$cmd2"rsync -uvL$syncParam --progress --ignore-errors --delete$ntfsParam$excludeParam '$pathToSave' '$path$destinationPath'"
+	cmd=$cmd2"rsync -L$syncParam --progress --ignore-errors --delete$ntfsParam$excludeParam '$pathToSave' '$path$destinationPath'"
 	echo "$cmd"
 	rsyncCommand=$rsyncCommand$and$cmd
 	rsyncCommand=$rsyncCommand" 2>>$errorLog 1>>$backupLog"
