@@ -1,4 +1,4 @@
 path="/mnt/nas_data/"
 #prefixPathToSave=""
-ntfs=1
+cifs=1
 

@@ -54,6 +54,7 @@ exclude=0
 debug=0
 conserveLastLog=0
 ntfs=0
+cifs=0
 forceyes=0
 
 includeFile="include.txt"
@@ -136,6 +137,11 @@ fi
 if [ $ntfs -eq 1 ]
 then
 	ntfsParam=" --modify-window=1 --size-only"
+	syncParam="rtD"
+fi
+
+if [ $cifs -eq 1 ]
+then
 	syncParam="rtD"
 fi
 

@@ -1,2 +1,2 @@
 path="/mnt/nas_pictures/"
-ntfs=1
+cifs=1
