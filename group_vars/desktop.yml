@@ -64,6 +64,7 @@ config_files:
 
 common_scripts:
   - src: git/git_clean_local_branches.sh
+  - src: misc/wake-up_nas.sh
 
 etc_hosts:
   - ip: 192.168.106.100
