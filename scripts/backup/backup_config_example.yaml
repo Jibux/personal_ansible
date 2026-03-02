@@ -1,0 +1,41 @@
+# backup_config.yaml — sample configuration for backup.py
+
+nas_host: "mynas.local"
+nas_user: toto
+nas_script_path: "/volume1/scripts/backup.sh"
+
+items:
+  - name: "documents"
+    source: "/home/user/Documents"
+    nas_destination: "nas:backup/documents"
+    nas_source: "/volume1/backup/documents"
+    cloud_destination: "gdrive:backup/documents"
+    cloud_destination_from_nas: "gdrive:nas-backup/documents"   # optional
+    exclude:
+      - "*.tmp"
+      - ".DS_Store"
+    local_to_nas_only: false
+    cloud_only: false
+    from_nas_only: false
+
+  - name: "photos"
+    source: "/home/user/Pictures"
+    nas_destination: "nas:backup/photos"
+    nas_source: "/volume1/backup/photos"
+    cloud_destination: "gdrive:backup/photos"
+    exclude:
+      - "Thumbs.db"
+    local_to_nas_only: false
+    cloud_only: false
+    from_nas_only: false
+
+  - name: "nas-archives"
+    # This item only syncs from NAS to cloud; never from local
+    source: ""
+    nas_destination: ""
+    nas_source: "/volume1/archives"
+    cloud_destination: "gdrive:archives"
+    exclude: []
+    local_to_nas_only: false
+    cloud_only: true
+    from_nas_only: true

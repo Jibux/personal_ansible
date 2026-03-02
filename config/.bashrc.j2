@@ -15,7 +15,7 @@ PATH=$PATH:$GIT_REPOSITORIES_PATH/git/diff-so-fancy
 [ -f "$GIT_REPOSITORIES_PATH/bash/kube-ps1/kube-ps1.sh" ] && source "$GIT_REPOSITORIES_PATH/bash/kube-ps1/kube-ps1.sh"
 
 # PYTHON SCRIPTS
-{% for item in python_scripts %}
+{% for item in python_scripts + specific_python_scripts|d([]) %}
 alias {{ item|basename }}='uv run {{ project_root_path }}/{{ item }}'
 {% endfor %}
 

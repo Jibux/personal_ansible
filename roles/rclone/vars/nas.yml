@@ -3,5 +3,5 @@ name: nas
 properties:
   type: smb
   host: nas
-  user: "{{ (lookup('file', secrets_path + '/nas/credentials.yml')|from_yaml).admin.username }}"
-  pass: "{{ (lookup('file', secrets_path + '/nas/credentials.yml')|from_yaml).admin.password_obscure }}"
+  user: "{{ (lookup('file', secrets_path + '/nas/credentials.yml')|from_yaml).jibux.username }}"
+  pass: "{{ (lookup('file', secrets_path + '/nas/credentials.yml')|from_yaml).jibux.password_obscure }}"
