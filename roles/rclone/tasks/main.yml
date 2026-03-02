@@ -11,3 +11,8 @@
        OWNER: "{{ local_user_name }}"
        GROUP: "{{ local_user_name }}"
     rclone_config_location: "{{ local_user_home }}/.config/rclone/rclone.conf"
+
+- name: Set rclone config file mode
+  file:
+    path: "{{ local_user_home }}/.config/rclone/rclone.conf"
+    mode: "0400"

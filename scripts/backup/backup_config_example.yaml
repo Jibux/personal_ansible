@@ -1,0 +1,47 @@
+# backup_config.yaml — sample configuration for backup.py
+
+nas_host: "mynas.local"
+nas_user: toto
+nas_script_path: "/volume1/scripts/backup.sh"
+
+# Script to unlock volumes - %i will be replaced by comma-separated volume list
+unlock_volumes:
+  script:
+    - /scripts/unlock-volume.py
+    - --volumes=%i
+  volumes:
+    - DOCS
+    - PHOTOS
+
+items:
+  - name: "documents"
+    source: "/home/user"
+    folder: Documents
+    nas_share: DOCS
+    nas_destination: "nas"
+    cloud_destination: "gdrive"
+    exclude:
+      - "*.tmp"
+      - ".DS_Store"
+    local_to_nas_only: true
+
+  - name: "photos"
+    source: "/home/user"
+    folder: Pictures
+    folder_destination: photos   # optional
+    nas_share: PHOTOS
+    nas_destination: "nas"
+    cloud_destination: "gdrive"
+    cloud_destination_from_nas: "gdrive2"   # optional
+    exclude:
+      - "Thumbs.db"
+
+    # This item only syncs from NAS to cloud; never from local
+  - name: "nas-archives"
+    folder: Pictures
+    nas_share: ARCHIVES
+    nas_volume: volume2   # optional
+    cloud_destination: "gdrive"
+    local_to_nas_only: false
+    cloud_only: true
+    from_nas_only: true

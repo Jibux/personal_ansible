@@ -1,4 +1,7 @@
 ---
+specific_python_scripts:
+  - scripts/backup/backup.py
+
 specific_scripts:
   - src: misc/fix_rights_for_share.sh
   - src: darktable/darktable_custom.sh
