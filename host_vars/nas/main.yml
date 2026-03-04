@@ -1,0 +1,2 @@
+---
+ansible_become_password: "{{ (lookup('file', secrets_path + '/nas/credentials.yml')|from_yaml).admin.password }}"

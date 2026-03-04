@@ -5,3 +5,8 @@
   become: true
   roles:
     - role: rclone
+
+- hosts: nas_host
+  become: true
+  roles:
+    - role: rclone_manual

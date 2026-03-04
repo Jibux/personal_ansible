@@ -3,3 +3,5 @@ rclone_configs:
   - name: local
     properties:
       type: local
+
+rclone_config_load_list: []

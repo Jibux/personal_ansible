@@ -3,6 +3,9 @@
     file: load_rclone_config.yml
   loop: "{{ rclone_config_load_list }}"
 
+- set_fact:
+    rclone_config_location: "{{ rclone_config_location|d(local_user_home + '/.config/rclone/rclone.conf') }}"
+
 - name: Execute role stefangweichinger.rclone
   import_role:
     name: stefangweichinger.ansible_rclone
@@ -10,9 +13,9 @@
     rclone_config_owner:
        OWNER: "{{ local_user_name }}"
        GROUP: "{{ local_user_name }}"
-    rclone_config_location: "{{ local_user_home }}/.config/rclone/rclone.conf"
+    rclone_config_location: "{{ rclone_config_location }}"
 
 - name: Set rclone config file mode
   file:
-    path: "{{ local_user_home }}/.config/rclone/rclone.conf"
+    path: "{{ rclone_config_location }}"
     mode: "0400"
