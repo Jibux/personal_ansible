@@ -6,3 +6,4 @@
 - import_playbook: setup_files.yml
 - import_playbook: secure_boot.yml
 - import_playbook: nas.yml
+- import_playbook: rclone.yml
