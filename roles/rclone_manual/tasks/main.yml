@@ -1,0 +1,16 @@
+---
+- block:
+    - name: Download rclone install script
+      ansible.builtin.get_url:
+        url: https://rclone.org/install.sh
+        dest: "{{ rclone_install_script }}"
+        mode: '0700'
+
+    - name: Execute rclone install script as root
+      ansible.builtin.command:
+        cmd: bash "{{ rclone_install_script }}"
+  always:
+    - name: Remove rclone install script
+      ansible.builtin.file:
+        path: "{{ rclone_install_script }}"
+        state: absent
