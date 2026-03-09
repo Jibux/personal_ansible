@@ -18,7 +18,7 @@ from pathlib import Path
 import requests
 
 SCRIPT_DIR = Path(__file__).parent
-TOKEN_FILE_PATH = SCRIPT_DIR / ".nas-token"
+TOKEN_FILE_PATH = Path.home() / ".nas-token"
 PING_TIMEOUT = 1
 EXIT_CODE_FAILED = 1
 
@@ -131,6 +131,8 @@ def get_token(url, credentials):
 
 def get_and_write_token(url, credentials):
     token = get_token(url, credentials)
+    TOKEN_FILE_PATH.touch()
+    TOKEN_FILE_PATH.chmod(0o600)
     TOKEN_FILE_PATH.write_text(token)
     return token
 

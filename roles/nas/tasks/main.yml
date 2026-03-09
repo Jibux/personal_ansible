@@ -11,6 +11,17 @@
     group: root
     mode: "0400"
     content: |
+      username={{ nas_credentials.jibux.username }}
+      password={{ nas_credentials.jibux.password }}
+  no_log: "{{ secure_log|d(true)|bool }}"
+
+- name: Credential files (admin)
+  copy:
+    dest: "{{ nas_admin_credentials_path }}"
+    owner: root
+    group: "{{ local_user_name }}"
+    mode: "0440"
+    content: |
       username={{ nas_credentials.admin.username }}
       password={{ nas_credentials.admin.password }}
   no_log: "{{ secure_log|d(true)|bool }}"
@@ -20,8 +31,8 @@
     src: "{{ secrets_path }}/nas/volume-passwords"
     dest: "{{ nas_volume_passwords_path }}"
     owner: root
-    group: root
-    mode: "0400"
+    group: "{{ local_user_name }}"
+    mode: "0440"
   no_log: "{{ secure_log|d(true)|bool }}"
 
 - name: Unlock synology volume systemd service file
@@ -40,8 +51,8 @@
     path: "{{ synology_scripts_path }}"
     state: directory
     owner: root
-    group: root
-    mode: "0700"
+    group: "{{ local_user_name }}"
+    mode: "0750"
   tags:
     - scripts
 
@@ -50,8 +61,8 @@
     src: unlock-synology-volume.py
     dest: "{{ unlock_synology_volume_script }}"
     owner: root
-    group: root
-    mode: "0500"
+    group: "{{ local_user_name }}"
+    mode: "0550"
   tags:
     - scripts
 

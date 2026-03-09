@@ -71,9 +71,6 @@ etc_hosts:
     names:
       - nas
 
-nas_volume_passwords_path: /root/.nas-volume-passwords
-nas_credentials_path: /root/.nas-cred
-
 setup_automounts:
   - src: //nas
     name: nas
