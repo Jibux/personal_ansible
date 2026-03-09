@@ -9,9 +9,6 @@ specific_scripts:
   - src: darktable/purge_pictures.sh
   - src: darktable/copy_darktable_dev.sh
   - src: darktable/organize_pictures.sh
-  - src: backup/backup_nas.sh
-  - src: backup/backup_nas_family.sh
-  - src: backup/X7.sh
 
 symlinks:
   - src: /data/JBH/Downloads
