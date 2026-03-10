@@ -21,6 +21,7 @@ SCRIPT_DIR = Path(__file__).parent
 TOKEN_FILE_PATH = Path.home() / ".nas-token"
 PING_TIMEOUT = 1
 EXIT_CODE_FAILED = 1
+REQUESTS_TIMEOUT = 60
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +96,7 @@ def test_token(url, token):
         "method": "list",
         "_sid": token,
     }
-    r = requests.get(f"{url}/webapi/entry.cgi", params, verify=False)
+    r = requests.get(f"{url}/webapi/entry.cgi", params, verify=False, timeout=REQUESTS_TIMEOUT)
     data = parse_response(r)
     if request_succeeded(data):
         logger.debug("Test token succeeded")
@@ -116,7 +117,7 @@ def get_token_from_credentials(url, credentials):
         "session": "FileStation",
         "format": "sid",
     }
-    r = requests.get(f"{url}/webapi/auth.cgi", params, verify=False)
+    r = requests.get(f"{url}/webapi/auth.cgi", params, verify=False, timeout=REQUESTS_TIMEOUT)
     data = parse_response(r)
     if not request_succeeded(data):
         fail("Login failed!")
@@ -155,7 +156,7 @@ def volume_action(url, token, volume_passwords, volume, action):
         "password": volume_password,
         "_sid": token,
     }
-    r = requests.post(f"{url}/webapi/entry.cgi", params, verify=False)
+    r = requests.post(f"{url}/webapi/entry.cgi", params, verify=False, timeout=REQUESTS_TIMEOUT)
     data = parse_response(r)
     if request_succeeded(data):
         logger.info(f"{action} {volume} succeeded")
@@ -172,7 +173,7 @@ def test_volume(url, token, volume):
         "limit": 1,
         "_sid": token,
     }
-    r = requests.post(f"{url}/webapi/entry.cgi", params, verify=False)
+    r = requests.post(f"{url}/webapi/entry.cgi", params, verify=False, timeout=REQUESTS_TIMEOUT)
     data = parse_response(r)
     if request_succeeded(data):
         logger.info(f"Test volume {volume} succeeded")
