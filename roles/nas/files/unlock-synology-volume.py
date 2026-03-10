@@ -189,9 +189,13 @@ def main():
     parser.add_argument("--host", help="Synology host", default="nas")
     parser.add_argument("-p", "--port", help="Synology port", default=5001, type=int)
     parser.add_argument("-s", "--scheme", help="http/https", default="https", choices=["http", "https"])
-    parser.add_argument("-c", "--credentials", help="Path to the credentials file", type=Path, required=True)
     parser.add_argument(
-        "--volume-passwords-file", help="Path to the volume passwords yaml file", type=Path, required=True
+        "-c", "--credentials", help="Path to the credentials file", type=Path, default=SCRIPT_DIR / ".nas-cred")
+    parser.add_argument(
+        "--volume-passwords-file",
+        help="Path to the volume passwords yaml file",
+        type=Path,
+        default=SCRIPT_DIR / ".nas-volume-passwords"
     )
     parser.add_argument("--volumes", help="Comma-separated volume names", action=SplitArgs, required=True)
     parser.add_argument(
