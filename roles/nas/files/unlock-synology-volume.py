@@ -25,6 +25,11 @@ EXIT_CODE_FAILED = 1
 logger = logging.getLogger(__name__)
 
 
+class SplitArgs(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None) -> None:
+        setattr(namespace, self.dest, values.split(','))
+
+
 def setup_trace_level():
     trace_level = 5
 
@@ -188,7 +193,7 @@ def main():
     parser.add_argument(
         "--volume-passwords-file", help="Path to the volume passwords yaml file", type=Path, required=True
     )
-    parser.add_argument("--volume", help="Volume name", required=True)
+    parser.add_argument("--volumes", help="Comma-separated volume names", action=SplitArgs, required=True)
     parser.add_argument(
         "-a", "--action", help="Action to do", choices=["encrypt", "decrypt"], default="decrypt")
     parser.add_argument('-v', '--verbose', help="Verbose mode (v or vv for trace)", action='count', default=0)
@@ -207,9 +212,10 @@ def main():
     logger.debug(f"Volume passwords keys: {dict_keys_str(volume_passwords)}")
     ping_test(args.host)
     token = get_and_write_token(url, credentials)
-    volume_action(url, token, volume_passwords, args.volume, args.action)
-    if args.action == "decrypt":
-        test_volume(url, token, args.volume)
+    for volume in args.volumes:
+        volume_action(url, token, volume_passwords, volume, args.action)
+        if args.action == "decrypt":
+            test_volume(url, token, volume)
 
 
 if __name__ == "__main__":
