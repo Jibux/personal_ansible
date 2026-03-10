@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 class SplitArgs(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None) -> None:
-        setattr(namespace, self.dest, values.split(','))
+        setattr(namespace, self.dest, values.split(","))
 
 
 def setup_trace_level():
@@ -168,7 +168,7 @@ def test_volume(url, token, volume):
         "api": "SYNO.FileStation.List",
         "version": "2",
         "method": "list",
-        "folder_path": f"\"/{volume}\"",
+        "folder_path": f'"/{volume}"',
         "limit": 1,
         "_sid": token,
     }
@@ -190,17 +190,17 @@ def main():
     parser.add_argument("-p", "--port", help="Synology port", default=5001, type=int)
     parser.add_argument("-s", "--scheme", help="http/https", default="https", choices=["http", "https"])
     parser.add_argument(
-        "-c", "--credentials", help="Path to the credentials file", type=Path, default=SCRIPT_DIR / ".nas-cred")
+        "-c", "--credentials", help="Path to the credentials file", type=Path, default=SCRIPT_DIR / ".nas-cred"
+    )
     parser.add_argument(
         "--volume-passwords-file",
         help="Path to the volume passwords yaml file",
         type=Path,
-        default=SCRIPT_DIR / ".nas-volume-passwords"
+        default=SCRIPT_DIR / ".nas-volume-passwords",
     )
     parser.add_argument("--volumes", help="Comma-separated volume names", action=SplitArgs, required=True)
-    parser.add_argument(
-        "-a", "--action", help="Action to do", choices=["encrypt", "decrypt"], default="decrypt")
-    parser.add_argument('-v', '--verbose', help="Verbose mode (v or vv for trace)", action='count', default=0)
+    parser.add_argument("-a", "--action", help="Action to do", choices=["encrypt", "decrypt"], default="decrypt")
+    parser.add_argument("-v", "--verbose", help="Verbose mode (v or vv for trace)", action="count", default=0)
     args = parser.parse_args()
     if args.verbose == 1:
         logger.setLevel(logging.DEBUG)
