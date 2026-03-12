@@ -86,12 +86,12 @@ setup_automounts:
       - name: data
         src: JIBUX-DATA
         pre_mount_service:
-          name: unlock-synology-volume
+          name: unlock-synology-share
           argument: JIBUX-DATA
       - name: pictures
         src: JIBUX-PICTURES
         pre_mount_service:
-          name: unlock-synology-volume
+          name: unlock-synology-share
           argument: JIBUX-PICTURES
 
 nas_ssl_no_verify: true

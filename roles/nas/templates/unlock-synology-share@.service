@@ -1,0 +1,9 @@
+[Unit]
+Description=Unlock %i synology share
+
+[Service]
+Type=oneshot
+ExecStart={{ manage_synology_nas_python }} {{ manage_synology_nas_script }} --credentials {{ nas_admin_credentials_path }} --share-passwords-file {{ nas_share_passwords_path }} --shares %i {{ "--no-verify" if nas_ssl_no_verify }}
+
+[Install]
+WantedBy=multi-user.target

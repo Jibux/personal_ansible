@@ -28,17 +28,17 @@
 
 - name: Volume passwords
   copy:
-    src: "{{ secrets_path }}/nas/volume-passwords"
-    dest: "{{ nas_volume_passwords_path }}"
+    src: "{{ secrets_path }}/nas/share-passwords"
+    dest: "{{ nas_share_passwords_path }}"
     owner: root
     group: "{{ local_user_name }}"
     mode: "0440"
   no_log: "{{ secure_log|d(true)|bool }}"
 
-- name: Unlock synology volume systemd service file
+- name: Unlock synology share systemd service file
   template:
-    src: unlock-synology-volume@.service
-    dest: "{{ systemd_files_path }}/unlock-synology-volume@.service"
+    src: unlock-synology-share@.service
+    dest: "{{ systemd_files_path }}/unlock-synology-share@.service"
     owner: root
     group: root
     mode: "0444"
@@ -56,19 +56,19 @@
   tags:
     - scripts
 
-- name: unlock-synology-volume script
+- name: manage-synology-nas script
   copy:
-    src: unlock-synology-volume.py
-    dest: "{{ unlock_synology_volume_script }}"
+    src: manage-synology-nas.py
+    dest: "{{ manage_synology_nas_script }}"
     owner: root
     group: "{{ local_user_name }}"
     mode: "0550"
   tags:
     - scripts
 
-- name: Copy unlock-synology-volume requirements.txt
+- name: Copy manage-synology-nas requirements.txt
   copy:
-    src: unlock-synology-volume_requirements.txt
+    src: manage-synology-nas_requirements.txt
     dest: "{{ synology_scripts_path }}/requirements.txt"
     owner: root
     group: root

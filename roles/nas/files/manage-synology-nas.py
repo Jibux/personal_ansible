@@ -145,42 +145,42 @@ def get_and_write_token(url, credentials):
     return token
 
 
-def volume_action(url, token, volume_passwords, volume, action):
-    # FIXME: if action is decrypt, volume password is not needed
-    volume_password = volume_passwords.get(volume)
-    if volume_password is None:
-        fail(f"Password not found for volume {volume}")
+def share_action(url, token, share_passwords, share, action):
+    # FIXME: if action is decrypt, share password is not needed
+    share_password = share_passwords.get(share)
+    if share_password is None:
+        fail(f"Password not found for share {share}")
     params = {
         "api": "SYNO.Core.Share.Crypto",
         "version": "1",
         "method": action,
-        "name": volume,
-        "password": volume_password,
+        "name": share,
+        "password": share_password,
         "_sid": token,
     }
     r = session.post(f"{url}/webapi/entry.cgi", data=params, timeout=REQUESTS_TIMEOUT)
     data = parse_response(r)
     if request_succeeded(data):
-        logger.info(f"{action} {volume} succeeded")
+        logger.info(f"{action} {share} succeeded")
     else:
-        fail(f"{action} volume {volume} failed!")
+        fail(f"{action} share {share} failed!")
 
 
-def test_volume(url, token, volume):
+def test_share(url, token, share):
     params = {
         "api": "SYNO.FileStation.List",
         "version": "2",
         "method": "list",
-        "folder_path": f'"/{volume}"',
+        "folder_path": f'"/{share}"',
         "limit": 1,
         "_sid": token,
     }
     r = session.post(f"{url}/webapi/entry.cgi", data=params, timeout=REQUESTS_TIMEOUT)
     data = parse_response(r)
     if request_succeeded(data):
-        logger.info(f"Test volume {volume} succeeded")
+        logger.info(f"Test share {share} succeeded")
     else:
-        fail(f"Test volume {volume} failed!")
+        fail(f"Test share {share} failed!")
 
 
 def dict_keys_str(d: dict):
@@ -197,12 +197,12 @@ def main():
         "-c", "--credentials", help="Path to the credentials file", type=Path, default=SCRIPT_DIR / ".nas-cred"
     )
     parser.add_argument(
-        "--volume-passwords-file",
-        help="Path to the volume passwords yaml file",
+        "--share-passwords-file",
+        help="Path to the share passwords yaml file",
         type=Path,
-        default=SCRIPT_DIR / ".nas-volume-passwords",
+        default=SCRIPT_DIR / ".nas-share-passwords",
     )
-    parser.add_argument("--volumes", help="Comma-separated volume names", action=SplitArgs, required=True)
+    parser.add_argument("--shares", help="Comma-separated share names", action=SplitArgs, required=True)
     parser.add_argument("-a", "--action", help="Action to do", choices=["encrypt", "decrypt"], default="decrypt")
     parser.add_argument("-v", "--verbose", help="Verbose mode (v or vv for trace)", action="count", default=0)
     args = parser.parse_args()
@@ -221,15 +221,15 @@ def main():
     logger.debug("Parse credentials file")
     credentials = parse_key_equal_value_file(args.credentials)
     logger.debug(f"Credentials keys: {dict_keys_str(credentials)}")
-    logger.debug("Parse volume passwords file")
-    volume_passwords = parse_key_equal_value_file(args.volume_passwords_file)
-    logger.debug(f"Volume passwords keys: {dict_keys_str(volume_passwords)}")
+    logger.debug("Parse share passwords file")
+    share_passwords = parse_key_equal_value_file(args.share_passwords_file)
+    logger.debug(f"Volume passwords keys: {dict_keys_str(share_passwords)}")
     ping_test(args.host)
     token = get_and_write_token(url, credentials)
-    for volume in args.volumes:
-        volume_action(url, token, volume_passwords, volume, args.action)
+    for share in args.shares:
+        share_action(url, token, share_passwords, share, args.action)
         if args.action == "decrypt":
-            test_volume(url, token, volume)
+            test_share(url, token, share)
 
 
 if __name__ == "__main__":

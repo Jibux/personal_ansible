@@ -100,7 +100,7 @@ def get_nas_destination_from_item(item: dict) -> str:
 
 
 def get_nas_source_from_item(item: dict) -> str:
-    return f"/{item.get('nas_volume', 'volume1')}/{item['nas_share']}/{get_folder_destination_from_item(item)}"
+    return f"/{item.get('nas_share', 'share1')}/{item['nas_share']}/{get_folder_destination_from_item(item)}"
 
 
 def get_cloud_destination_from_item(item: dict, from_nas: False) -> str:
@@ -242,14 +242,14 @@ def execute_from_nas(
     ssh_execute(nas_host, nas_user, remote_cmd, True, dry_run=dry_run)
 
 
-def handle_unlock_volumes(unlock_volumes: list[dict], filter_volumes: list[str], verbose=False) -> None:
-    if not unlock_volumes:
+def launch_pre_backup_script(pre_backup_script: list[dict] | None, filter_shares: list[str], verbose=False) -> None:
+    if not pre_backup_script:
         return
-    logger.debug(f"Filter volumes: {filter_volumes}")
-    volumes_to_unlock = ",".join([vol for vol in unlock_volumes["volumes"] if vol in filter_volumes])
-    logger.debug(f"Unlock volumes: {volumes_to_unlock}")
-    unlock_volumes_script = [s.replace("%i", volumes_to_unlock) for s in unlock_volumes["script"]]
-    run_subprocess(unlock_volumes_script, verbose=verbose)
+    logger.debug(f"Filter shares: {filter_shares}")
+    shares_to_handle = ",".join([vol for vol in pre_backup_script["shares"] if vol in filter_shares])
+    logger.debug(f"Shares to handle: {shares_to_handle}")
+    pre_backup_script_final = [s.replace("%i", shares_to_handle) for s in pre_backup_script["script"]]
+    run_subprocess(pre_backup_script_final, verbose=verbose)
 
 
 def list_names(items: list[str]) -> None:
@@ -310,8 +310,8 @@ def main() -> None:
         items = [i for i in items if i.get("name") in filter_names]
         logger.info(f"Filtered to {len(items)} item(s): {filter_names}")
 
-    filter_volumes = list(set([i["nas_share"] for i in items]))
-    handle_unlock_volumes(config.get("unlock_volumes"), filter_volumes, verbose)
+    filter_shares = list(set([i["nas_share"] for i in items]))
+    launch_pre_backup_script(config.get("pre_backup_script"), filter_shares, verbose)
 
     if do_nas:
         for item in items:

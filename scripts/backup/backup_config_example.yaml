@@ -2,15 +2,15 @@
 
 nas_host: "mynas.local"
 nas_user: toto
-nas_script_path: "/volume1/scripts/backup.sh"
+nas_script_path: "/root/scripts/backup.sh"
 
-# Script to unlock volumes - %i will be replaced by comma-separated volume list
-unlock_volumes:
+# Script to launch before doing backup - %i will be replaced by comma-separated share list
+pre_backup_script:
   script:
-    - /scripts/unlock-volume.py
+    - /scripts/unlock-share.py
     - --no-verify # for ssl certificate no verify
-    - --volumes=%i
-  volumes:
+    - --shares=%i
+  shares:
     - DOCS
     - PHOTOS
 
@@ -41,7 +41,7 @@ items:
   - name: "nas-archives"
     folder: Pictures
     nas_share: ARCHIVES
-    nas_volume: volume2   # optional
+    nas_share: volume2   # optional
     cloud_destination: "gdrive"
     local_to_nas_only: false
     cloud_only: true
