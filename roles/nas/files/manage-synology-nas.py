@@ -13,20 +13,24 @@ import argparse
 import logging
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 import requests
 import urllib3
+from requests.exceptions import ConnectionError
+from wakeonlan import send_magic_packet
 
 SCRIPT_DIR = Path(__file__).parent
 TOKEN_FILE_PATH = Path.home() / ".nas-token"
 PING_TIMEOUT = 1
 EXIT_CODE_FAILED = 1
 REQUESTS_TIMEOUT = 60
+SLEEP_TIME = 10
 ENCRYPT = "encrypt"
 DECRYPT = "decrypt"
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(Path(__file__).stem)
 session = requests.Session()
 
 
@@ -49,7 +53,7 @@ def setup_trace_level():
 
 def setup_logger(lo):
     handler = logging.StreamHandler()
-    formatter = logging.Formatter("%(asctime)s %(levelname)-6s %(message)s", "%Y-%m-%d %H:%M:%S")
+    formatter = logging.Formatter("%(asctime)s [%(levelname)-8s] %(name)s: %(message)s")
     handler.setFormatter(formatter)
     lo.addHandler(handler)
     lo.setLevel(logging.INFO)
@@ -66,13 +70,44 @@ def parse_key_equal_value_file(path: Path):
     return {line.split("=")[0].strip(): line.split("=")[1].strip() for line in content}
 
 
-def ping_test(host):
+def ping_test(host, should_fail=False):
     command = ["ping", "-q", "-c", "1", "-W", str(PING_TIMEOUT), host]
     response = subprocess.call(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if response != 0:
-        fail(f"Ping {host} failed")
+        if should_fail:
+            fail(f"Ping {host} failed")
+        else:
+            return False
     else:
         logger.info(f"Ping {host} OK")
+        return True
+
+
+def wake_up_nas_and_wait(host, mac):
+    logger.info(f"Wake up {host}")
+    send_magic_packet(mac)
+    count = 0
+    while True:
+        if count == 30:
+            fail(f"{host} did not wake up on time or is not reachable at all")
+        logger.debug(f"Waiting {SLEEP_TIME} second(s) for {host} to be reachable")
+        time.sleep(SLEEP_TIME)
+        if ping_test(host):
+            break
+        count += 1
+
+
+def login_attempt(url, credentials):
+    params = {
+        "api": "SYNO.API.Auth",
+        "version": "6",
+        "method": "login",
+        "account": credentials["username"],
+        "passwd": credentials["password"],
+        "session": "FileStation",
+        "format": "sid",
+    }
+    return session.get(f"{url}/webapi/auth.cgi", params=params, timeout=REQUESTS_TIMEOUT)
 
 
 def parse_response(resp):
@@ -83,13 +118,42 @@ def parse_response(resp):
     return json_out
 
 
-def request_succeeded(data):
-    return data.get("success", False)
+def wait_for_dsm_api_to_be_ready(url):
+    count = 0
+    sleep_time = 1
+    while True:
+        if count == 300:
+            fail(f"DSM login API on {url} failed to be ready on time")
+        try:
+            r = login_attempt(url, {'username': 'invalid', 'password': 'invalid'})
+            data = parse_response(r)
+            # 400 = wrong credentials → auth daemon is up and rejecting properly
+            if data.get('error', {}).get('code') == 400:
+                return
+            log_msg = "DSM started, but API not yet ready"
+        except ConnectionError:
+            log_msg = "DSM starting"
+        logger.debug(f"Waiting {sleep_time} second(s) for DSM login API on {url} to be ready ({log_msg})")
+        time.sleep(sleep_time)
+        count += 1
+
+
+def test_nas(host, url, mac):
+    # If mac is defined, we should try to wake up nas and wait for it
+    # Else we should fail if host is not reachable
+    success = ping_test(host, mac is None)
+    if not success:
+        wake_up_nas_and_wait(host, mac)
+    wait_for_dsm_api_to_be_ready(url)
 
 
 def get_token_from_file():
     logger.info("Get token from file")
     return TOKEN_FILE_PATH.read_text()
+
+
+def request_succeeded(data):
+    return data.get("success", False)
 
 
 def test_token(url, token):
@@ -112,16 +176,7 @@ def test_token(url, token):
 
 def get_token_from_credentials(url, credentials):
     logger.info("Get token from credentials")
-    params = {
-        "api": "SYNO.API.Auth",
-        "version": "6",
-        "method": "login",
-        "account": credentials["username"],
-        "passwd": credentials["password"],
-        "session": "FileStation",
-        "format": "sid",
-    }
-    r = session.get(f"{url}/webapi/auth.cgi", params=params, timeout=REQUESTS_TIMEOUT)
+    r = login_attempt(url, credentials)
     data = parse_response(r)
     if not request_succeeded(data):
         fail("Login failed!")
@@ -192,7 +247,8 @@ def dict_keys_str(d: dict):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", help="Synology host", default="nas")
-    parser.add_argument("--port", "-p", help="Synology port", default=5001, type=int)
+    parser.add_argument("--port", "-p", help="Synology http port", default=5001, type=int)
+    parser.add_argument("--mac", "-m", help="Synology MAC address used for wake on lan", type=str)
     parser.add_argument("--scheme", "-s", help="http/https", default="https", choices=["http", "https"])
     parser.add_argument("--no-verify", help="Skip ssl certificate validation", action="store_true", default=False)
     parser.add_argument(
@@ -204,7 +260,7 @@ def main():
         type=Path,
         default=SCRIPT_DIR / ".nas-share-passwords",
     )
-    parser.add_argument("--shares", help="Comma-separated share names", action=SplitArgs, required=True)
+    parser.add_argument("--shares", help="Comma-separated share names", action=SplitArgs)
     parser.add_argument("--crypt-action", help="Action to do", choices=[ENCRYPT, DECRYPT])
     parser.add_argument("--verbose", "-v", help="Verbose mode (v or vv for trace)", action="count", default=0)
     args = parser.parse_args()
@@ -226,9 +282,10 @@ def main():
     logger.debug("Parse share passwords file")
     share_passwords = parse_key_equal_value_file(args.share_passwords_file)
     logger.debug(f"Volume passwords keys: {dict_keys_str(share_passwords)}")
-    ping_test(args.host)
+    test_nas(args.host, url, args.mac)
     token = get_and_write_token(url, credentials)
     if not args.crypt_action:
+        logger.info("No --crypt-action specified, exiting...")
         sys.exit(0)
     for share in args.shares:
         share_action(url, token, share_passwords, share, args.crypt_action)

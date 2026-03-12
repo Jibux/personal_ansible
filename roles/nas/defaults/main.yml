@@ -1,5 +1,4 @@
 ---
-nas_credentials_path: /root/.nas-cred
 synology_scripts_path: /opt/synology_scripts
 nas_admin_credentials_path: "{{ synology_scripts_path }}/.nas-cred"
 nas_share_passwords_path: "{{ synology_scripts_path }}/.nas-share-passwords"

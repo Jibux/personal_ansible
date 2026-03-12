@@ -32,7 +32,7 @@ class SplitArgs(argparse.Action):
 def setup_logger(verbose: bool) -> None:
     logging.basicConfig(
         level=logging.DEBUG if verbose else logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+        format="%(asctime)s [%(levelname)-8s] %(name)s: %(message)s",
     )
     logging.getLogger("paramiko").setLevel(logging.WARNING)
 

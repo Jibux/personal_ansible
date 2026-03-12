@@ -76,6 +76,7 @@ setup_automounts:
     name: nas
     type: cifs
     credentials_file: "{{ nas_credentials_path }}"
+    mount_timeout: 300
     mount_options:
       - rw
       - uid=1000
@@ -94,4 +95,5 @@ setup_automounts:
           name: unlock-synology-share
           argument: JIBUX-PICTURES
 
+nas_credentials_path: /root/.nas-cred
 nas_ssl_no_verify: true
