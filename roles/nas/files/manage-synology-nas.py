@@ -23,6 +23,8 @@ TOKEN_FILE_PATH = Path.home() / ".nas-token"
 PING_TIMEOUT = 1
 EXIT_CODE_FAILED = 1
 REQUESTS_TIMEOUT = 60
+ENCRYPT = "encrypt"
+DECRYPT = "decrypt"
 
 logger = logging.getLogger(__name__)
 session = requests.Session()
@@ -146,7 +148,7 @@ def get_and_write_token(url, credentials):
 
 
 def share_action(url, token, share_passwords, share, action):
-    # FIXME: if action is decrypt, share password is not needed
+    # FIXME: if action is DECRYPT, share password is not needed
     share_password = share_passwords.get(share)
     if share_password is None:
         fail(f"Password not found for share {share}")
@@ -190,11 +192,11 @@ def dict_keys_str(d: dict):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", help="Synology host", default="nas")
-    parser.add_argument("-p", "--port", help="Synology port", default=5001, type=int)
-    parser.add_argument("-s", "--scheme", help="http/https", default="https", choices=["http", "https"])
+    parser.add_argument("--port", "-p", help="Synology port", default=5001, type=int)
+    parser.add_argument("--scheme", "-s", help="http/https", default="https", choices=["http", "https"])
     parser.add_argument("--no-verify", help="Skip ssl certificate validation", action="store_true", default=False)
     parser.add_argument(
-        "-c", "--credentials", help="Path to the credentials file", type=Path, default=SCRIPT_DIR / ".nas-cred"
+        "--credentials", help="Path to the credentials file", type=Path, default=SCRIPT_DIR / ".nas-cred"
     )
     parser.add_argument(
         "--share-passwords-file",
@@ -203,8 +205,8 @@ def main():
         default=SCRIPT_DIR / ".nas-share-passwords",
     )
     parser.add_argument("--shares", help="Comma-separated share names", action=SplitArgs, required=True)
-    parser.add_argument("-a", "--action", help="Action to do", choices=["encrypt", "decrypt"], default="decrypt")
-    parser.add_argument("-v", "--verbose", help="Verbose mode (v or vv for trace)", action="count", default=0)
+    parser.add_argument("--crypt-action", help="Action to do", choices=[ENCRYPT, DECRYPT])
+    parser.add_argument("--verbose", "-v", help="Verbose mode (v or vv for trace)", action="count", default=0)
     args = parser.parse_args()
 
     if args.verbose == 1:
@@ -226,9 +228,11 @@ def main():
     logger.debug(f"Volume passwords keys: {dict_keys_str(share_passwords)}")
     ping_test(args.host)
     token = get_and_write_token(url, credentials)
+    if not args.crypt_action:
+        sys.exit(0)
     for share in args.shares:
-        share_action(url, token, share_passwords, share, args.action)
-        if args.action == "decrypt":
+        share_action(url, token, share_passwords, share, args.crypt_action)
+        if args.crypt_action == DECRYPT:
             test_share(url, token, share)
 
 
