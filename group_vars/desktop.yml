@@ -93,3 +93,5 @@ setup_automounts:
         pre_mount_service:
           name: unlock-synology-volume
           argument: JIBUX-PICTURES
+
+nas_ssl_no_verify: true

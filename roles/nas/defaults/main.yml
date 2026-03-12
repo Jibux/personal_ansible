@@ -3,5 +3,6 @@ nas_credentials_path: /root/.nas-cred
 synology_scripts_path: /opt/synology_scripts
 nas_admin_credentials_path: "{{ synology_scripts_path }}/.nas-cred"
 nas_volume_passwords_path: "{{ synology_scripts_path }}/.nas-volume-passwords"
+nas_ssl_no_verify: false
 unlock_synology_volume_script: "{{ synology_scripts_path }}/unlock-synology-volume.py"
 unlock_synology_volume_python: "{{ synology_scripts_path }}/.venv/bin/python3"

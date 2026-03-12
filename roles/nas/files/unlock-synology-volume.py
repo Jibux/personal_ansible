@@ -16,6 +16,7 @@ import sys
 from pathlib import Path
 
 import requests
+import urllib3
 
 SCRIPT_DIR = Path(__file__).parent
 TOKEN_FILE_PATH = Path.home() / ".nas-token"
@@ -24,6 +25,7 @@ EXIT_CODE_FAILED = 1
 REQUESTS_TIMEOUT = 60
 
 logger = logging.getLogger(__name__)
+session = requests.Session()
 
 
 class SplitArgs(argparse.Action):
@@ -96,7 +98,7 @@ def test_token(url, token):
         "method": "list",
         "_sid": token,
     }
-    r = requests.get(f"{url}/webapi/entry.cgi", params, verify=False, timeout=REQUESTS_TIMEOUT)
+    r = session.get(f"{url}/webapi/entry.cgi", params=params, timeout=REQUESTS_TIMEOUT)
     data = parse_response(r)
     if request_succeeded(data):
         logger.debug("Test token succeeded")
@@ -117,7 +119,7 @@ def get_token_from_credentials(url, credentials):
         "session": "FileStation",
         "format": "sid",
     }
-    r = requests.get(f"{url}/webapi/auth.cgi", params, verify=False, timeout=REQUESTS_TIMEOUT)
+    r = session.get(f"{url}/webapi/auth.cgi", params=params, timeout=REQUESTS_TIMEOUT)
     data = parse_response(r)
     if not request_succeeded(data):
         fail("Login failed!")
@@ -156,7 +158,7 @@ def volume_action(url, token, volume_passwords, volume, action):
         "password": volume_password,
         "_sid": token,
     }
-    r = requests.post(f"{url}/webapi/entry.cgi", params, verify=False, timeout=REQUESTS_TIMEOUT)
+    r = session.post(f"{url}/webapi/entry.cgi", data=params, timeout=REQUESTS_TIMEOUT)
     data = parse_response(r)
     if request_succeeded(data):
         logger.info(f"{action} {volume} succeeded")
@@ -173,7 +175,7 @@ def test_volume(url, token, volume):
         "limit": 1,
         "_sid": token,
     }
-    r = requests.post(f"{url}/webapi/entry.cgi", params, verify=False, timeout=REQUESTS_TIMEOUT)
+    r = session.post(f"{url}/webapi/entry.cgi", data=params, timeout=REQUESTS_TIMEOUT)
     data = parse_response(r)
     if request_succeeded(data):
         logger.info(f"Test volume {volume} succeeded")
@@ -190,6 +192,7 @@ def main():
     parser.add_argument("--host", help="Synology host", default="nas")
     parser.add_argument("-p", "--port", help="Synology port", default=5001, type=int)
     parser.add_argument("-s", "--scheme", help="http/https", default="https", choices=["http", "https"])
+    parser.add_argument("--no-verify", help="Skip ssl certificate validation", action="store_true", default=False)
     parser.add_argument(
         "-c", "--credentials", help="Path to the credentials file", type=Path, default=SCRIPT_DIR / ".nas-cred"
     )
@@ -203,10 +206,16 @@ def main():
     parser.add_argument("-a", "--action", help="Action to do", choices=["encrypt", "decrypt"], default="decrypt")
     parser.add_argument("-v", "--verbose", help="Verbose mode (v or vv for trace)", action="count", default=0)
     args = parser.parse_args()
+
     if args.verbose == 1:
         logger.setLevel(logging.DEBUG)
     elif args.verbose == 2:
         logger.setLevel(logging.TRACE)
+
+    if args.no_verify:
+        session.verify = False
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
     url = f"{args.scheme}://{args.host}:{args.port}"
     logger.info(f"url: {url}")
     logger.debug("Parse credentials file")

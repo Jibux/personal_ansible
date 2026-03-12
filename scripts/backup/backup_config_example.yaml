@@ -8,6 +8,7 @@ nas_script_path: "/volume1/scripts/backup.sh"
 unlock_volumes:
   script:
     - /scripts/unlock-volume.py
+    - --no-verify # for ssl certificate no verify
     - --volumes=%i
   volumes:
     - DOCS
