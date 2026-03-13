@@ -1,0 +1,9 @@
+[Unit]
+Description=Wake up NAS and wait for its readiness
+
+[Service]
+Type=oneshot
+ExecStart={{ manage_synology_nas_python }} {{ manage_synology_nas_script }} --wake-up-nas --mac=00:11:32:59:52:13 {{ "--no-verify" if nas_ssl_no_verify }}
+
+[Install]
+WantedBy=multi-user.target

@@ -35,6 +35,17 @@
     mode: "0440"
   no_log: "{{ secure_log|d(true)|bool }}"
 
+- name: Unlock wake up nas systemd service file
+  template:
+    src: wake-up-nas-and-wait-for-it.service
+    dest: "{{ systemd_files_path }}/wake-up-nas-and-wait-for-it.service"
+    owner: root
+    group: root
+    mode: "0444"
+  notify: Daemon reload
+  tags:
+    - systemd
+
 - name: Unlock synology share systemd service file
   template:
     src: unlock-synology-share@.service

@@ -84,6 +84,8 @@ setup_automounts:
     mounts:
       - name: media
         src: JIBUX-MEDIA
+        pre_mount_service:
+          name: wake-up-nas-and-wait-for-it
       - name: data
         src: JIBUX-DATA
         pre_mount_service:
