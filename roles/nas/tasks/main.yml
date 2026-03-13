@@ -4,6 +4,16 @@
     file: "{{ secrets_path }}/nas/credentials.yml"
     name: nas_credentials
 
+- name: Create synology_scripts_path dir
+  file:
+    path: "{{ synology_scripts_path }}"
+    state: directory
+    owner: root
+    group: "{{ local_user_name }}"
+    mode: "0750"
+  tags:
+    - scripts
+
 - name: Credential files
   copy:
     dest: "{{ nas_credentials_path }}"
@@ -56,16 +66,6 @@
   notify: Daemon reload
   tags:
     - systemd
-
-- name: Create synology_scripts_path dir
-  file:
-    path: "{{ synology_scripts_path }}"
-    state: directory
-    owner: root
-    group: "{{ local_user_name }}"
-    mode: "0750"
-  tags:
-    - scripts
 
 - name: manage-synology-nas script
   copy:
