@@ -41,7 +41,7 @@ items:
   - name: "nas-archives"
     folder: Pictures
     nas_share: ARCHIVES
-    nas_share: volume2   # optional
+    nas_volume: volume2   # optional
     cloud_destination: "gdrive"
     local_to_nas_only: false
     cloud_only: true

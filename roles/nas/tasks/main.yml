@@ -26,7 +26,7 @@
       password={{ nas_credentials.admin.password }}
   no_log: "{{ secure_log|d(true)|bool }}"
 
-- name: Volume passwords
+- name: Share passwords
   copy:
     src: "{{ secrets_path }}/nas/share-passwords"
     dest: "{{ nas_share_passwords_path }}"

@@ -293,7 +293,7 @@ def main():
     logger.debug(f"Credentials keys: {dict_keys_str(credentials)}")
     logger.debug("Parse share passwords file")
     share_passwords = parse_key_equal_value_file(args.share_passwords_file)
-    logger.debug(f"Volume passwords keys: {dict_keys_str(share_passwords)}")
+    logger.debug(f"Share passwords keys: {dict_keys_str(share_passwords)}")
 
     if args.wake_up_nas:
         if not args.mac:
