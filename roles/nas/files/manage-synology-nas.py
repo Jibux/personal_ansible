@@ -18,7 +18,7 @@ from pathlib import Path
 
 import requests
 import urllib3
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError, SSLError
 from wakeonlan import send_magic_packet
 
 SCRIPT_DIR = Path(__file__).parent
@@ -70,7 +70,7 @@ def parse_key_equal_value_file(path: Path):
     return {line.split("=")[0].strip(): line.split("=")[1].strip() for line in content}
 
 
-def ping_test(host, should_fail=False):
+def ping_test(host, should_fail=True):
     command = ["ping", "-q", "-c", "1", "-W", str(PING_TIMEOUT), host]
     response = subprocess.call(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if response != 0:
@@ -83,7 +83,7 @@ def ping_test(host, should_fail=False):
         return True
 
 
-def wake_up_nas_and_wait(host, mac):
+def wake_up_nas_and_wait_for_ping(host, mac):
     logger.info(f"Wake up {host}")
     send_magic_packet(mac)
     count = 0
@@ -92,7 +92,7 @@ def wake_up_nas_and_wait(host, mac):
             fail(f"{host} did not wake up on time or is not reachable at all")
         logger.debug(f"Waiting {SLEEP_TIME} second(s) for {host} to be reachable")
         time.sleep(SLEEP_TIME)
-        if ping_test(host):
+        if ping_test(host, False):
             break
         count += 1
 
@@ -118,33 +118,39 @@ def parse_response(resp):
     return json_out
 
 
+def dsm_api_test(url, should_fail=True):
+    try:
+        r = login_attempt(url, {"username": "invalid", "password": "invalid"})
+        data = parse_response(r)
+        # 400 = wrong credentials → auth daemon is up and rejecting properly
+        if data.get("error", {}).get("code") == 400:
+            logger.info("DSM API ready")
+            ret = {"succeed": True}
+        else:
+            ret = {"succeed": False, "msg": "DSM started, but API not yet ready"}
+    except SSLError:
+        fail("SSLError, did you forget to use --no-verify option?")
+    except ConnectionError:
+        ret = {"succeed": False, "msg": "DSM starting"}
+
+    if should_fail and not ret.get("succeed"):
+        fail(ret.get("msg"))
+    else:
+        return ret
+
+
 def wait_for_dsm_api_to_be_ready(url):
     count = 0
     sleep_time = 1
     while True:
         if count == 300:
             fail(f"DSM login API on {url} failed to be ready on time")
-        try:
-            r = login_attempt(url, {'username': 'invalid', 'password': 'invalid'})
-            data = parse_response(r)
-            # 400 = wrong credentials → auth daemon is up and rejecting properly
-            if data.get('error', {}).get('code') == 400:
-                return
-            log_msg = "DSM started, but API not yet ready"
-        except ConnectionError:
-            log_msg = "DSM starting"
-        logger.debug(f"Waiting {sleep_time} second(s) for DSM login API on {url} to be ready ({log_msg})")
+        ret = dsm_api_test(url, False)
+        if ret.get("succeed"):
+            return
+        logger.debug(f"Waiting {sleep_time} second(s) for DSM login API on {url} to be ready ({ret.get('msg')})")
         time.sleep(sleep_time)
         count += 1
-
-
-def test_nas(host, url, mac):
-    # If mac is defined, we should try to wake up nas and wait for it
-    # Else we should fail if host is not reachable
-    success = ping_test(host, mac is None)
-    if not success:
-        wake_up_nas_and_wait(host, mac)
-    wait_for_dsm_api_to_be_ready(url)
 
 
 def get_token_from_file():
@@ -248,7 +254,6 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", help="Synology host", default="nas")
     parser.add_argument("--port", "-p", help="Synology http port", default=5001, type=int)
-    parser.add_argument("--mac", "-m", help="Synology MAC address used for wake on lan", type=str)
     parser.add_argument("--scheme", "-s", help="http/https", default="https", choices=["http", "https"])
     parser.add_argument("--no-verify", help="Skip ssl certificate validation", action="store_true", default=False)
     parser.add_argument(
@@ -260,9 +265,16 @@ def main():
         type=Path,
         default=SCRIPT_DIR / ".nas-share-passwords",
     )
-    parser.add_argument("--shares", help="Comma-separated share names", action=SplitArgs)
+    parser.add_argument("--shares", help="Comma-separated share names", action=SplitArgs, default=[])
     parser.add_argument("--crypt-action", help="Action to do", choices=[ENCRYPT, DECRYPT])
     parser.add_argument("--verbose", "-v", help="Verbose mode (v or vv for trace)", action="count", default=0)
+
+    wake_up_nas_group = parser.add_argument_group("wake-up-nas", "Options for waking up the NAS")
+    wake_up_nas_group.add_argument(
+        "--wake-up-nas", "-w", help="Wake up NAS and wait for its readiness", action="store_true", default=False
+    )
+    wake_up_nas_group.add_argument("--mac", "-m", help="Synology MAC address used for wake on lan", type=str)
+
     args = parser.parse_args()
 
     if args.verbose == 1:
@@ -282,11 +294,27 @@ def main():
     logger.debug("Parse share passwords file")
     share_passwords = parse_key_equal_value_file(args.share_passwords_file)
     logger.debug(f"Volume passwords keys: {dict_keys_str(share_passwords)}")
-    test_nas(args.host, url, args.mac)
-    token = get_and_write_token(url, credentials)
+
+    if args.wake_up_nas:
+        if not args.mac:
+            parser.error("--mac is required when --wake-up-nas is specified")
+        if not ping_test(args.host, False):
+            wake_up_nas_and_wait_for_ping(args.host, args.mac)
+        wait_for_dsm_api_to_be_ready(url)
+    else:
+        ping_test(args.host)
+        dsm_api_test(url)
+
     if not args.crypt_action:
-        logger.info("No --crypt-action specified, exiting...")
+        logger.warning("No --crypt-action specified, exiting...")
         sys.exit(0)
+
+    if not args.shares:
+        logger.warning("No --shares specified, exiting...")
+        sys.exit(0)
+
+    token = get_and_write_token(url, credentials)
+
     for share in args.shares:
         share_action(url, token, share_passwords, share, args.crypt_action)
         if args.crypt_action == DECRYPT:
