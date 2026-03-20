@@ -6,6 +6,7 @@
 sudo apt update && sudo apt install curl git
 git clone git@github.com:Jibux/personal_ansible
 cd personal_ansible
+./update_submodules.sh
 ./install_ansible.sh
 ```
 
