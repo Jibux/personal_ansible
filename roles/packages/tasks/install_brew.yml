@@ -1,13 +1,13 @@
 ---
-- name: Install {{ item.tap }}
+- name: Install {{ item.tap|d("") }} tap
   become: no
   homebrew_tap:
     name: "{{ item.tap }}"
     state: "{{ item.state|d('present') }}"
     path: '{{ brew_exec_venv_path }}'
-  when: item.tap|d
+  when: item.tap is defined
 
-- name: Install {{ item.formulae }}
+- name: Install {{ item.formulae }} formulae
   become: no
   homebrew:
     name: "{{ item.formulae }}"

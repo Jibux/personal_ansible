@@ -4,7 +4,7 @@
   loop: "{{ rclone_config_load_list }}"
 
 - set_fact:
-    rclone_config_location: "{{ rclone_config_location|d(local_user_home + '/.config/rclone/rclone.conf') }}"
+    rclone_config_location: "{{ rclone_config_custom_location|d(local_user_home + '/.config/rclone/rclone.conf') }}"
 
 - name: Execute role stefangweichinger.rclone
   import_role:

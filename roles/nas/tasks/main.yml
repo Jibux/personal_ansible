@@ -94,7 +94,7 @@
     - venv
 
 - name: Setup venv
-  command: "{{ uv_bin_path }} venv --directory '{{ synology_scripts_path }}' --python 3.12"
+  command: "{{ uv_bin_path }} venv --directory '{{ synology_scripts_path }}' --python 3.12 --clear"
   tags:
     - venv
 

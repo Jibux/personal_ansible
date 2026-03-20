@@ -5,8 +5,22 @@
     keyring: /usr/share/keyrings/meganz-archive-keyring.gpg
     state: present
 
+- name: Set ubuntu version for ubuntu
+  set_fact:
+    ubuntu_version: "{{ ansible_distribution_version }}"
+  when: "ansible_facts['distribution'] == 'Ubuntu'"
+
+- name: Set ubuntu version for mint
+  set_fact:
+    ubuntu_version: "{{ lookup('file', '/etc/upstream-release/lsb-release')|split('\n')|select('match', '^DISTRIB_RELEASE=') | first | split('=') | last }}"
+  when: "ansible_facts['distribution'] == 'Linux Mint'"
+
+- fail:
+    msg: "ubuntu_version cannot be found"
+  when: ubuntu_version is not defined
+
 - name: Add mega repo
   apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/meganz-archive-keyring.gpg] https://mega.nz/linux/repo/xUbuntu_{{ ansible_distribution_version }}/ ./"
+    repo: "deb [signed-by=/usr/share/keyrings/meganz-archive-keyring.gpg] https://mega.nz/linux/repo/xUbuntu_{{ ubuntu_version }}/ ./"
     filename: megasync
     state: present

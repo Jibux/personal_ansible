@@ -6,6 +6,7 @@
         - packages_no_snap
   tags:
       - packages_no_snap
+  when: "ansible_facts['distribution'] == 'Ubuntu'"
 
 - include_tasks:
     file: syncthing.yml

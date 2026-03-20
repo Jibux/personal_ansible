@@ -53,6 +53,7 @@ jibux_svc
 [desktop]
 jibux-taf
 jibux-home
+jibux-little-laptop
 [home]
 jibux-home
 [secure_boot]
