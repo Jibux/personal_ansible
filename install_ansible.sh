@@ -68,6 +68,7 @@ uv pip install -r "$SCRIPT_ROOT_PATH/requirements.txt"
 (export bin_path=$HOME/.local/bin && curl -sfL https://direnv.net/install.sh | bash)
 direnv allow "$SCRIPT_ROOT_PATH"
 
+# shellcheck source=/dev/null
 . "$VENV_DIR/bin/activate"
 
 ansible-galaxy install -r requirements.yml --force
