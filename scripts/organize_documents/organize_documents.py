@@ -4,7 +4,7 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#   "pdftotext",
+#   "pymupdf",
 #   "PyYAML"
 # ]
 # ///
@@ -17,7 +17,7 @@ import stat
 import sys
 from functools import reduce
 
-import pdftotext
+import fitz
 from yaml import CSafeLoader as Loader
 from yaml import load
 
@@ -85,9 +85,7 @@ def get_file_name_to_match(file_name):
 
 def get_file_content_to_match(file_path, file_type):
     if file_type == "pdf":
-        with open(file_path, "rb") as f:
-            pdf = pdftotext.PDF(f)
-        return pdf
+        return fitz.open(file_path)
     else:
         return []
 
@@ -168,7 +166,7 @@ def get_array_items_from_pattern_key(pattern, key, array):
 
 def get_page_lines(pattern):
     def get_lines(lines, page):
-        page_split = page.splitlines()
+        page_split = page.splitlines() if type(page) is str else page.get_text().splitlines()
         return lines + get_array_items_from_pattern_key(pattern, "lines", page_split)
 
     return get_lines
