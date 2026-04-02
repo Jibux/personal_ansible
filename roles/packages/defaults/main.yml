@@ -4,7 +4,6 @@ apt_packages:
   - xsel
   - xclip
   - tree
-  - libpoppler-cpp-dev
   - htop
   - vim
   - vim-common
