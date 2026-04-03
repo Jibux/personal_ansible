@@ -1,0 +1,4 @@
+---
+- hosts: raspberry
+  roles:
+    - raspberry
