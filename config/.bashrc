@@ -261,11 +261,6 @@ alias sl='ls'
 alias ..='cd ..'
 alias cd..='cd ..'
 
-# Some more alias to avoid making mistakes:
-alias rm='rm -i'
-alias cp='cp -i'
-alias mv='mv -i'
-
 # SSH alias
 alias sshr='ssh -l root'
 alias scpr='scp -o "User=root"'
