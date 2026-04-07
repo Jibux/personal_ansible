@@ -112,3 +112,6 @@
 	whitespace = red reverse
 [diff-so-fancy]
 	stripLeadingSymbols = false
+[user]
+	email = jibux@jibux.info
+	name = Jibux

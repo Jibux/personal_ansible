@@ -1,0 +1,5 @@
+user = mail_admin
+password = HVJPGwc87eY8BWfY
+dbname = mail
+query = SELECT quota FROM users WHERE email='%s'
+hosts = 127.0.0.1

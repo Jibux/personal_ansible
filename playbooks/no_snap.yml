@@ -1,0 +1,4 @@
+---
+- hosts: no_snap
+  roles:
+    - no_snap

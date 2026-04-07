@@ -1,0 +1,10 @@
+---
+- name: Restart crond
+  systemd:
+    name: cron
+    state: restarted
+
+- name: Restart unattended-upgrades
+  systemd:
+    name: unattended-upgrades
+    state: restarted
