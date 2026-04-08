@@ -309,7 +309,6 @@ else
 	umask 022
 fi
 
-[ -f "$HOME/.bashrc.ansible" ] && . "$HOME/.bashrc.ansible" || true
 [ -f "$HOME/.bashrc.local" ] && . "$HOME/.bashrc.local" || true
 
 export NVM_DIR="$HOME/.nvm"
@@ -354,4 +353,6 @@ if command -v fzf > /dev/null; then
 	  --preview 'tree -C {} | head -200'
 	"
 fi
+
+[ -f "$HOME/.bashrc.ansible" ] && . "$HOME/.bashrc.ansible" || true
 
