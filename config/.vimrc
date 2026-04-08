@@ -250,6 +250,8 @@ noremap [6^ :tabnext<CR>
 noremap [5^ :tabprevious<CR>
 noremap <C-t> :tabnew<CR>
 
+" Open browser on url
+nnoremap <C-LeftMouse> gx
 
 " fzf
 " Launch file selector
