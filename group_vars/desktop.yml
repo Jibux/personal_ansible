@@ -10,10 +10,6 @@ git_repositories:
     dest: vim
   - repo: https://github.com/junegunn/vim-plug
     dest: vim
-  - repo: https://github.com/nhdaly/tmux-better-mouse-mode
-    dest: tmux
-  - repo: https://github.com/tmux-plugins/tmux-sensible
-    dest: tmux
   - repo: https://github.com/tmux-plugins/tpm
     dest: tmux
   - repo: https://github.com/cykerway/complete-alias
