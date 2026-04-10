@@ -354,5 +354,17 @@ if command -v fzf > /dev/null; then
 	"
 fi
 
+if ! shopt -oq posix; then
+	COMPLETE_ALIAS="$HOME/.bashrc.d/complete-alias"
+	# To make ls work with fzf
+	COMPAL_AUTO_UNMASK=1
+	if [ -f "$COMPLETE_ALIAS" ]; then
+		. "$COMPLETE_ALIAS"
+		# auto complete all aliases
+		complete -F _complete_alias "${!BASH_ALIASES[@]}"
+	fi
+fi
+
+[ -f "$HOME/.bashrc.d/kube-ps1.sh" ] && . "$HOME/.bashrc.d/kube-ps1.sh"
 [ -f "$HOME/.bashrc.ansible" ] && . "$HOME/.bashrc.ansible" || true
 
