@@ -1,0 +1,14 @@
+---
+- name: Create dir {{ file_dir_path }}
+  file:
+    path: "{{ file_dir_path }}"
+    state: directory
+  become: "{{ root_path == '/root' }}"
+
+- name: Download {{ remote_file.url }} to {{ file_dir_path }}
+  ansible.builtin.get_url:
+    url: "{{ remote_file.url }}"
+    dest: "{{ file_path }}"
+    mode: "{{ remote_file.mode|d('0600') }}"
+    force: true
+  become: "{{ root_path == '/root' }}"

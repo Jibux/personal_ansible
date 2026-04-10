@@ -11,6 +11,17 @@
     - git
 
 - include_tasks:
+    file: get_remote_file_all_users.yml
+    apply:
+      tags:
+        - remote_files
+  loop: "{{ remote_files }}"
+  loop_control:
+    loop_var: remote_file
+  tags:
+    - remote_files
+
+- include_tasks:
     file: setup_files.yml
     apply:
       tags:

@@ -3,33 +3,32 @@ python_scripts:
   - scripts/organize_documents/organize_documents.py
   - scripts/tools/pdf_to_text.py
 
+remote_files:
+  - url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    dest: .vim/autoload/plug.vim
+    root_use: true
+  - url: https://raw.githubusercontent.com/altercation/solarized/master/vim-colors-solarized/colors/solarized.vim
+    dest: .vim/colors/solarized.vim
+    root_use: true
+  - url: https://raw.githubusercontent.com/cykerway/complete-alias/master/complete_alias
+    dest: .bashrc.d/complete-alias
+  - url: https://raw.githubusercontent.com/jonmosco/kube-ps1/master/kube-ps1.sh
+    dest: .bashrc.d/kube-ps1.sh
+  - url: https://github.com/so-fancy/diff-so-fancy/releases/download/v1.4.10/diff-so-fancy
+    dest: .local/bin/diff-so-fancy
+    mode: "0700"
+
 git_repositories:
   - repo: https://github.com/majutsushi/urxvt-font-size
     dest: urxvt
-  - repo: https://github.com/altercation/solarized
-    dest: vim
-  - repo: https://github.com/junegunn/vim-plug
-    dest: vim
   - repo: https://github.com/tmux-plugins/tpm
     dest: tmux
-  - repo: https://github.com/cykerway/complete-alias
-    dest: bash
-  - repo: https://github.com/jonmosco/kube-ps1
-    dest: bash
-  - repo: https://github.com/so-fancy/diff-so-fancy
-    dest: git
 
 git_files:
   - src: urxvt/urxvt-font-size/font-size
     dest: .urxvt/ext/font-size
-  - src: vim/solarized/vim-colors-solarized/colors/solarized.vim
-    dest: .vim/colors/solarized.vim
-    root_use: true
-  - src: vim/vim-plug/plug.vim
-    dest: .vim/autoload/plug.vim
-    root_use: true
-  - src: tmux
-    dest: .tmux/plugins
+  - src: tmux/tpm
+    dest: .tmux/plugins/tpm
     root_use: true
 
 config_files:
