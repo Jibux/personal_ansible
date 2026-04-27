@@ -24,7 +24,7 @@ apt_packages:
   - exiftool
   - wakeonlan
 
-apt_desktop_packages:
+apt_linux_desktop_packages:
   - exfatprogs
   - gparted
   - lvm2

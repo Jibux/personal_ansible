@@ -1,6 +1,6 @@
 - name: Install apt packages
   apt:
-    name: "{{ apt_packages + (apt_desktop_packages if 'desktop' in group_names else []) }}"
+    name: "{{ apt_packages + (apt_linux_desktop_packages if 'linux_desktop' in group_names else []) }}"
     state: latest
     update_cache: true
 
