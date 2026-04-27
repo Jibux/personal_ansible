@@ -20,7 +20,7 @@
     mode: "0700"
   when: setup_file_dir != home_dir
 
-- name: Stat file
+- name: Stat dest file
   stat:
     path: "{{ setup_file_dest }}"
   register: setup_file_dest_st
@@ -59,13 +59,23 @@
         state: link
       when: user_name != "root"
 
-    # FIXME: use synchronize module instead and ignore .git directories
-    - name: Copy {{ setup_file_src }} to {{ setup_file_dest }}
-      copy:
-        src: "{{ setup_file_src }}"
-        dest: "{{ setup_file_dest }}"
-        mode: "0600"
+    - name: Stat source file
+      stat:
+        path: "{{ setup_file_src }}"
+      register: setup_file_src_st
       when: user_name == "root"
+
+    - name: Copy {{ setup_file_src }} to {{ setup_file_dest }}
+      ansible.posix.synchronize:
+        src: "{{ setup_file_src }}{{ suffix }}"
+        dest: "{{ setup_file_dest }}{{ suffix }}"
+        rsync_opts:
+          - "--exclude=.git"
+        owner: false
+        group: false
+      when: user_name == "root"
+      vars:
+        suffix: "{{ '/' if setup_file_src_st.stat.isdir else '' }}"
 
 - name: Copy template {{ setup_file_src }} to {{ setup_file_dest }}
   template:
