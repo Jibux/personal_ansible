@@ -1,0 +1,34 @@
+---
+etc_hosts:
+  - ip: 192.168.106.100
+    names:
+      - nas
+
+setup_automounts:
+  - src: //nas
+    name: nas
+    type: cifs
+    credentials_file: "{{ nas_credentials_path }}"
+    mount_timeout: 300
+    mount_options:
+      - rw
+      - uid=1000
+      - gid=1000
+    mounts:
+      - name: media
+        src: JIBUX-MEDIA
+        pre_mount_service:
+          name: wake-up-nas-and-wait-for-it
+      - name: data
+        src: JIBUX-DATA
+        pre_mount_service:
+          name: unlock-synology-share
+          argument: JIBUX-DATA
+      - name: pictures
+        src: JIBUX-PICTURES
+        pre_mount_service:
+          name: unlock-synology-share
+          argument: JIBUX-PICTURES
+
+nas_credentials_path: /root/.nas-cred
+nas_ssl_no_verify: true
