@@ -24,10 +24,29 @@ setup_ansible_vault_password()
 	return 0
 }
 
+setup_git_local_config()
+{
+	local git_local_config=$HOME/.gitconfig.local
+	if [ -f "$git_local_config" ]; then
+		echo "$git_local_config already present"
+		return 0
+	fi
+
+	read -re -p "Git username: " -i "$(git log -1 --format="%an")" git_username
+	read -re -p "Git Email: " -i "$(git log -1 --format="%ae")" git_email
+	cat > "$git_local_config" <<EOF
+[user]
+	email = $git_email
+	name = $git_username
+EOF
+	echo "$git_local_config written"
+}
+
 
 trap fail ERR
 
 setup_ansible_vault_password
+setup_git_local_config
 
 SCRIPT_ROOT_PATH="$(dirname "$(realpath "$0")")"
 VENV_DIR="$SCRIPT_ROOT_PATH/.venv"
