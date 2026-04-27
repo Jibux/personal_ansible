@@ -1,0 +1,17 @@
+---
+- include_tasks:
+    file: packages_no_snap.yml
+    apply:
+      tags:
+        - packages_no_snap
+  tags:
+      - packages_no_snap
+  when: "ansible_facts['distribution'] == 'Ubuntu'"
+
+- include_tasks:
+    file: syncthing.yml
+    apply:
+      tags:
+        - syncthing
+  tags:
+      - syncthing

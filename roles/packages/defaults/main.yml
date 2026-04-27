@@ -16,18 +16,20 @@ apt_packages:
   - tmux
   - tmux-plugin-manager
   - pandoc
-  - exfatprogs
   - shellcheck
   - terminator
-  - gparted
-  - nvme-cli
-  - smartmontools
   - pkg-config
   - g++
   - python3-dev
-  - lvm2
   - exiftool
   - wakeonlan
+
+apt_desktop_packages:
+  - exfatprogs
+  - gparted
+  - lvm2
+  - nvme-cli
+  - smartmontools
 
 brew_bin_real_path_default: /home/linuxbrew/.linuxbrew/bin/brew
 brew_bin_venv_path: '{{ project_root_path }}/.venv/bin/brew'

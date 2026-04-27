@@ -2,4 +2,9 @@
 - hosts: desktop
   become: true
   roles:
+    - packages_desktop
+
+- hosts: desktop:wsl
+  become: true
+  roles:
     - packages

@@ -1,24 +1,6 @@
----
-- include_tasks:
-    file: packages_no_snap.yml
-    apply:
-      tags:
-        - packages_no_snap
-  tags:
-      - packages_no_snap
-  when: "ansible_facts['distribution'] == 'Ubuntu'"
-
-- include_tasks:
-    file: syncthing.yml
-    apply:
-      tags:
-        - syncthing
-  tags:
-      - syncthing
-
 - name: Install apt packages
   apt:
-    name: "{{ apt_packages }}"
+    name: "{{ apt_packages + (apt_desktop_packages if 'desktop' in group_names else []) }}"
     state: latest
     update_cache: true
 
