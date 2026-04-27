@@ -1,26 +1,34 @@
 ---
-- name: Add mega apt key
-  apt_key:
-    url: https://mega.nz/keys/MEGA_signing.key
-    keyring: /usr/share/keyrings/meganz-archive-keyring.gpg
-    state: present
+- name: Test MEGA repo
+  shell: apt-get indextargets --format '$(ORIGIN)' | grep -q MEGA
+  register: test_mega
+  ignore_errors: true
 
-- name: Set ubuntu version for ubuntu
-  set_fact:
-    ubuntu_version: "{{ ansible_facts['distribution_version'] }}"
-  when: "ansible_facts['distribution'] == 'Ubuntu'"
+- when: test_mega is failed
+  block:
+    - name: Add mega apt key
+      apt_key:
+        url: https://mega.nz/keys/MEGA_signing.key
+        keyring: /usr/share/keyrings/meganz-archive-keyring.gpg
+        state: present
 
-- name: Set ubuntu version for mint
-  set_fact:
-    ubuntu_version: "{{ lookup('file', '/etc/upstream-release/lsb-release')|split('\n')|select('match', '^DISTRIB_RELEASE=') | first | split('=') | last }}"
-  when: "ansible_facts['distribution'] == 'Linux Mint'"
+    - name: Set ubuntu version for ubuntu
+      set_fact:
+        ubuntu_version: "{{ ansible_facts['distribution_version'] }}"
+      when: "ansible_facts['distribution'] == 'Ubuntu'"
 
-- fail:
-    msg: "ubuntu_version cannot be found"
-  when: ubuntu_version is not defined
+    - name: Set ubuntu version for mint
+      set_fact:
+        ubuntu_version: "{{ lookup('file', '/etc/upstream-release/lsb-release')|split('\n')|select('match', '^DISTRIB_RELEASE=') | first | split('=') | last }}"
+      when: "ansible_facts['distribution'] == 'Linux Mint'"
 
-- name: Add mega repo
-  apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/meganz-archive-keyring.gpg] https://mega.nz/linux/repo/xUbuntu_{{ ubuntu_version }}/ ./"
-    filename: megasync
-    state: present
+    - name: Fail if ubuntu_version cannot be found
+      fail:
+        msg: "ubuntu_version cannot be found"
+      when: ubuntu_version is not defined
+
+    - name: Add mega repo
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/meganz-archive-keyring.gpg] https://mega.nz/linux/repo/xUbuntu_{{ ubuntu_version }}/ ./"
+        filename: megasync
+        state: present
