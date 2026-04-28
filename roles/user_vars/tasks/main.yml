@@ -3,3 +3,17 @@
     local_user_name: "{{ lookup('env', 'USER' ) }}"
     local_user_home: "{{ lookup('env', 'HOME' ) }}"
   become: false
+
+- when: test_become
+  block:
+    - name: Test privilege escalation
+      shell: echo
+      changed_when: no
+      become: yes
+    - set_fact:
+        become_password_set: true
+  rescue:
+    - fail:
+        msg: |-
+          Please specify become password when executing this playbook.
+      ignore_errors: true

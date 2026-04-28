@@ -1,12 +1,15 @@
 ---
-- when: root_path != "/root" or remote_file.root_use|d(false)
-  loop:
-    - "{{ local_user_home }}"
-    - /root
-  loop_control:
-    loop_var: root_path
-  vars:
-    file_path: "{{ root_path }}/{{ remote_file.dest }}"
-    file_dir_path: "{{ (root_path + '/' + remote_file.dest)|dirname }}"
-  include_tasks:
+- include_tasks:
     file: get_remote_file.yml
+  vars:
+    file_path: "{{ local_user_home }}/{{ remote_file.dest }}"
+    file_dir_path: "{{ (local_user_home + '/' + remote_file.dest)|dirname }}"
+
+- when: become_password_set
+  become: true
+  block:
+    - include_tasks:
+        file: get_remote_file.yml
+      vars:
+        file_path: "/root/{{ remote_file.dest }}"
+        file_dir_path: "{{ ('/root/' + remote_file.dest)|dirname }}"

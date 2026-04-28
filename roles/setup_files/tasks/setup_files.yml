@@ -9,7 +9,8 @@
     home_dir: "{{ local_user_home }}"
   when: not setup_file.root_only|d(false)
 
-- become: true
+- when: become_password_set
+  become: true
   block:
     - include_tasks:
         file: setup_file.yml

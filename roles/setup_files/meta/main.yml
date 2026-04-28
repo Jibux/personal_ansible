@@ -1,5 +1,6 @@
 ---
 dependencies:
   - role: user_vars
+    test_become: true
     tags:
       - always
