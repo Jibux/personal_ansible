@@ -40,6 +40,10 @@ config_files:
     kind: template
   - src: .vimrc
     root_use: true
+  - src: .gitconfig.local.j2
+    dest: .gitconfig.local
+    kind: template
+  - src: .gitconfig-perso
   - src: .gitconfig
   - src: .tmux.conf
   - src: .screenrc

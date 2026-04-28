@@ -1,3 +1,4 @@
 *.retry
 *dpkg-old
 .git_repositories
+group_vars/all/local.yml
