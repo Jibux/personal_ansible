@@ -135,13 +135,12 @@ set noexpandtab
 
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 
-au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml "foldmethod=indent
+au! BufNewFile,BufReadPost *.{yaml,yml,yaml.j2,yml.j2} set filetype=yaml "foldmethod=indent
 autocmd FileType yaml setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab
 autocmd FileType markdown setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab
 autocmd Filetype markdown TableModeToggle
 autocmd FileType jsonnet setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab
 autocmd FileType json setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab
-autocmd FileType jinja setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab
 
 " In visual, keep the indented bloc
 vnoremap < <gv
