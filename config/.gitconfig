@@ -63,6 +63,7 @@
         verbose = true
 [branch]
 	sort = -committerdate
+	autosetuprebase = always
 [tag]
 	sort = version:refname
 [pull]
@@ -82,7 +83,7 @@
 	autocorrect = prompt
 [rebase]
 	autoSquash = true
-	 autoStash = true
+	autoStash = true
 	updateRefs = true
 [diff]
 	algorithm = histogram
