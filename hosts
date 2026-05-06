@@ -56,6 +56,7 @@ jibux-home
 jibux-little-laptop
 [wsl]
 alaptop-wsl
+jibux-taf-wsl
 [desktop]
 [desktop:children]
 linux_desktop
