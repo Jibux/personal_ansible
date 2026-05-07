@@ -1,5 +1,7 @@
 # vi:syntax=gitconfig
 [include]
+	path = ~/.gitconfig.ansible
+[include]
 	path = ~/.gitconfig.local
 [core]
 	editor = vim
@@ -113,3 +115,7 @@
 	whitespace = red reverse
 [diff-so-fancy]
 	stripLeadingSymbols = false
+[credential]
+	helper = /mnt/c/Program\\ Files/Git/mingw64/libexec/git-core/git-credential-wincred.exe
+[http]
+	sslCAinfo = /usr/local/share/api.domedi.local.crt
