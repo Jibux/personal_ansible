@@ -1,7 +1,7 @@
 ---
 - import_playbook: user_vars.yml
 
-- hosts: linux_desktop
+- hosts: desktop
   become: true
   roles:
     - role: rclone
