@@ -25,6 +25,14 @@
   tags:
       - brew
 
+- include_tasks:
+    file: docker.yml
+    apply:
+      tags:
+        - docker
+  tags:
+      - docker
+
 - become: false
   block:
     - include_tasks:

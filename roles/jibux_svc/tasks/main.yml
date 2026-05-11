@@ -1,13 +1,5 @@
 ---
 - include_tasks:
-    file: softs.yml
-    apply:
-      tags:
-        - softs
-  tags:
-    - softs
-
-- include_tasks:
     file: ovh_cred.yml
     apply:
       tags:
