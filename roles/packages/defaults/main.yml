@@ -23,6 +23,8 @@ apt_packages:
   - python3-dev
   - exiftool
   - wakeonlan
+  - bind9-dnsutils
+  - bind9-host
 
 apt_linux_desktop_packages:
   - exfatprogs
