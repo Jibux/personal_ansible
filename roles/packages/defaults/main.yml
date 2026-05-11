@@ -31,6 +31,12 @@ apt_linux_desktop_packages:
   - nvme-cli
   - smartmontools
 
+apt_wsl_packages:
+  # to display correctly some chars
+  - fonts-noto
+  - fonts-noto-mono
+  - fonts-noto-extra
+
 brew_bin_real_path_default: /home/linuxbrew/.linuxbrew/bin/brew
 brew_bin_venv_path: '{{ project_root_path }}/.venv/bin/brew'
 brew_exec_venv_path: '{{ brew_bin_venv_path|dirname }}'

@@ -1,8 +1,21 @@
+---
 - name: Install apt packages
   apt:
-    name: "{{ apt_packages + (apt_linux_desktop_packages if 'linux_desktop' in group_names else []) }}"
+    name: "{{ apt_packages }}"
     state: latest
     update_cache: true
+
+- name: Install apt packages for linux desktop
+  apt:
+    name: "{{ apt_linux_desktop_packages }}"
+    state: latest
+  when: "'linux_desktop' in group_names"
+
+- name: Install apt packages for wsl
+  apt:
+    name: "{{ apt_wsl_packages }}"
+    state: latest
+  when: "'wsl' in group_names"
 
 - include_tasks:
     file: install_brews.yml
