@@ -318,9 +318,10 @@ export NVM_DIR="$HOME/.nvm"
 command -v direnv > /dev/null && eval "$(direnv hook bash)" || true
 
 if [ -e /home/linuxbrew/.linuxbrew/bin/brew ]; then
-# BEGIN ANSIBLE MANAGED BLOCK: linuxbrew
-eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-# END ANSIBLE MANAGED BLOCK: linuxbrew
+	eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+	for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/"*; do
+	      [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+	done
 fi
 
 if command -v fzf > /dev/null; then
