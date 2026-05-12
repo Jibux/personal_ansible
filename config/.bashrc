@@ -270,6 +270,7 @@ alias scpr='scp -o "User=root"'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Git
+alias g='git'
 alias git_lasthash_copy='lasthash=$(git lasthash)'
 
 # Alias definitions.
