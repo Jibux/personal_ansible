@@ -100,7 +100,7 @@ def get_nas_destination_from_item(item: dict) -> str:
 
 
 def get_nas_source_from_item(item: dict) -> str:
-    return f"/{item['nas_share']}/{get_folder_destination_from_item(item)}"
+    return f"/{item.get('nas_volume', 'volume1')}/{item['nas_share']}/{get_folder_destination_from_item(item)}"
 
 
 def get_cloud_destination_from_item(item: dict, from_nas: False) -> str:
