@@ -190,7 +190,7 @@ ps1_color()
 	format_date="\[\033[00;90m\]$(date '+%H:%M:%S')$COLOR_RESET"
 
 	local kube_ps=""
-	if [[ -f /usr/bin/kubectl && $(type -t kube_ps1) == function ]]; then
+	if [[ $(command -v kubectl) && $(type -t kube_ps1) == function ]]; then
 		kube_ps=' $(kube_ps1)'
 	fi
 	local venv_prompt=""
@@ -248,6 +248,9 @@ unset color_prompt force_color_prompt
 
 PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;}history -a"
 
+[ -f "$HOME/.bashrc.ansible" ] && . "$HOME/.bashrc.ansible" || true
+[ -f "$HOME/.bashrc.d/kube-ps1.sh" ] && . "$HOME/.bashrc.d/kube-ps1.sh"
+
 export LS_OPTIONS="$alias_color -h --group-directories-first"
 alias ls='ls $LS_OPTIONS'
 alias ll='ls $LS_OPTIONS -lA'
@@ -272,6 +275,11 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # Git
 alias g='git'
 alias git_lasthash_copy='lasthash=$(git lasthash)'
+
+# Kube
+alias k=kubectl
+alias kctx=kubectx
+alias kns=kubens
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -366,7 +374,4 @@ if ! shopt -oq posix; then
 		complete -F _complete_alias "${!BASH_ALIASES[@]}"
 	fi
 fi
-
-[ -f "$HOME/.bashrc.d/kube-ps1.sh" ] && . "$HOME/.bashrc.d/kube-ps1.sh"
-[ -f "$HOME/.bashrc.ansible" ] && . "$HOME/.bashrc.ansible" || true
 
