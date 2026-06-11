@@ -9,6 +9,7 @@
 [init]
 	defaultBranch = main
 [alias]
+	a = add
 	addm = "!git ls-files --deleted --modified --other --exclude-standard | fzf -0 -m --preview 'git diff --color=always {-1}' | xargs -r git add"
 	addmp = "!git ls-files --deleted --modified --exclude-standard | fzf -0 -m --preview 'git diff --color=always {-1}' | xargs -r -o git add -p"
 	co = checkout
@@ -17,12 +18,14 @@
 	bra = branch -a
 	brr = branch -r
 	ci = commit
+	c = commit
 	cia = commit --amend
 	ciaa = commit --amend -a
 	cif = "!f() { if [ $# -eq 0 ] && command -v fzf >/dev/null; then git log --oneline --no-decorate --no-merges | fzf -0 --preview 'git show --color=always --format=oneline {1}' | awk '{print $1}' | xargs -r git commit --fixup; else git commit --fixup \"$@\"; fi; }; f"
 	st = status
 	sethead = remote set-head origin -a
 	pclone = clone --filter=blob:limit=100k
+	l = log -1 HEAD
 	last = log -1 HEAD
 	lasthash = log -n1 --format=format:"%H" HEAD
 	msghash = "!f() { git log --grep=\"^$1$\" -n1 --pretty=format:'%h'; }; f"
@@ -49,11 +52,12 @@
 	cpka = cherry-pick --abort
 	cpkc = cherry-pick --continue
 	cpktobr = "!f() { msg=$(git hashmsg \"$2\") && git sw $1 && git pull && hash_revert=$(git msghash \"$msg\") && [ -n \"$hash_revert\" ] && git revert $hash_revert ; git cpk $2 && git sync && git sw -;}; f"
-	gr = grep
+	g = grep
 	rv = revert
 	l = log --graph --pretty=format:'%Cred%h%Creset%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
 	la = log --graph --pretty=format:'%Cred%h%Creset%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --all
 	las = log --oneline --graph --all --decorate --simplify-by-decoration
+	d = diff
 	diffc = diff --cached
 	diffw = diff -w
 	diffwo = diff --word-diff
