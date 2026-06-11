@@ -1,0 +1,50 @@
+---
+- name: Gather package facts
+  package_facts:
+    manager: apt
+
+- when: "'snapd' in ansible_facts.packages"
+  block:
+    - name: List snap packages
+      shell:
+        cmd: snap list --color=never --unicode=never | tail -n +2 | awk '{print $1}'
+      register: snap_list
+
+    - set_fact:
+        snap_core_pkgs: '{{ snap_list.stdout_lines | map("regex_search", "^(core\d*|snapd)$") | select("string") }}'
+
+    - name: Print snap packages
+      debug:
+        msg: "{{ snap_list.stdout_lines }}"
+
+    - name: Remove snap packages
+      community.general.snap:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ snap_list.stdout_lines | difference(snap_core_pkgs) }}"
+
+    - name: Remove snap core packages (should be removed by apt anyway)
+      community.general.snap:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ snap_core_pkgs | sort }}"
+      ignore_errors: true
+
+- name: Remove snapd
+  apt:
+    name: snapd
+    state: absent
+    purge: true
+
+- name: Remove snap cache
+  file:
+    path: /var/cache/snapd/
+    state: absent
+
+- name: Blacklist snapd
+  copy:
+    src: nosnap.pref
+    dest: /etc/apt/preferences.d/nosnap.pref
+    owner: root
+    group: root
+    mode: 444

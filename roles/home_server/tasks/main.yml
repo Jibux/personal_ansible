@@ -1,0 +1,41 @@
+---
+- name: Server name
+  hostname:
+    name: "{{ home_server_name }}"
+
+- name: Set timezone to Europe/Paris
+  timezone:
+    name: Europe/Paris
+  notify: Restart crond
+
+- name: Install packages
+  apt:
+    name:
+      - vim
+      - mlocate
+      - tcpdump
+      - sysstat
+      - smartmontools
+      - wakeonlan
+    state: present
+
+- name: Unattended upgrades setup
+  copy:
+    src: 50unattended-upgrades
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    mode: "0444"
+    owner: root
+    group: root
+  notify: Restart unattended-upgrades
+
+- name: Config files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0444"
+    owner: root
+    group: root
+  loop:
+    - { src: vimrc, dest: /etc/vim/vimrc }
+    - { src: root_bashrc, dest: /root/.bashrc }
+    - { src: .selected_editor, dest: /root/.selected_editor }
