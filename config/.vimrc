@@ -235,13 +235,14 @@ nnoremap <F6> :so ~/.vim/sessions/
 set pastetoggle=<F1>
 "set clipboard=unnamedplus
 
+" Copy word in normal mode
+nnoremap <C-c> yiw
 
 " Copy/cut/past in visual mode using clipboard
 vnoremap <C-c> "+y
 vnoremap <C-x> "+d
 inoremap <C-v> <C-c>"+pa
 vnoremap <C-v> <C-c>"+p
-
 
 " Tabs
 " ctrl+page-up or ctrl+page-down
