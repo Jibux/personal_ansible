@@ -1,0 +1,42 @@
+---
+- name: Install postfix
+  apt:
+    name: "{{ ['postfix', 'postfix-mysql', 'postfix-pcre', 'mailutils'] }}"
+    state: present
+
+- name: Setup configuration file for postfix
+  copy: owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: 'master.cf', dest: '/etc/postfix/', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'main.cf', dest: '/etc/postfix/', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'canonical.recipient', dest: '/etc/postfix/', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'generic', dest: '/etc/postfix/', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'smtp_reply_filter', dest: '/etc/postfix/', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'mysql-virtual_domains.cf', dest: '/etc/postfix/', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'mysql-virtual_email2email.cf', dest: '/etc/postfix/', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'mysql-virtual_forwardings.cf', dest: '/etc/postfix/', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'mysql-virtual_mailboxes.cf', dest: '/etc/postfix/', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'mysql-virtual_mailbox_limit_maps.cf', dest: '/etc/postfix/', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'mysql-virtual_transports.cf', dest: '/etc/postfix/', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'mailname', dest: '/etc/mailname', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'aliases', dest: '/etc/aliases', owner: 'root', group: 'root', mode: '0644' }
+  register: postfix_conf
+
+- name: Stat /etc/postfix/ssl/smtpd.key
+  stat: path=/etc/postfix/ssl/smtpd.key
+  register: postfix_ssl_certificate
+  tags: sync_files
+
+- name: Sync /etc/postfix/ssl files from backup
+  shell: rsync -aH --numeric-ids {{ '--dry-run' if ansible_check_mode else '' }} "/mnt/backup/rsnapshot/weekly.0/{{ ansible_hostname }}/etc/postfix/ssl/" "/etc/postfix/ssl/"
+  when: postfix_ssl_certificate.stat.isreg is not defined
+  check_mode: false
+  tags: sync_files
+
+- name: Reload postfix config
+  shell: postmap /etc/postfix/canonical.recipient && postmap /etc/postfix/generic && newaliases
+  when: postfix_conf.changed
+
+- name: Restart postfix
+  systemd: state=restarted enabled=yes name=postfix
+  when: postfix_conf.changed

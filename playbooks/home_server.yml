@@ -1,0 +1,4 @@
+---
+- hosts: home_server
+  roles:
+    - home_server

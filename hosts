@@ -41,8 +41,13 @@
 # leading 0s:
 
 ## db-[99:101]-node.example.com
-
+[home_server]
+jibux-server.local
 [raspberry]
+jibux-server.local
+[no_snap]
+jibux-server.local
+[mail]
 jibux-server.local
 [jibux_svc]
 jibux-server.local
