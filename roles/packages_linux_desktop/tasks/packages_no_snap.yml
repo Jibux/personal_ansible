@@ -33,15 +33,15 @@
     group: root
     mode: "0444"
 
-- name: APT key packages.mozilla.org
-  ansible.builtin.get_url:
-    url: https://packages.mozilla.org/apt/repo-signing-key.gpg
-    dest: /etc/apt/keyrings/packages.mozilla.org.asc
-
-- name: APT repo packages.mozzila.org
-  ansible.builtin.apt_repository:
-    repo: "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main"
-    filename: mozzila-org
+- name: Add packages.mozilla.org repo
+  deb822_repository:
+    name: mozzila-org
+    types: deb
+    uris: https://packages.mozilla.org/apt
+    suites: mozilla
+    components: main
+    signed_by: https://packages.mozilla.org/apt/repo-signing-key.gpg
+    state: present
 
 # FIXME: remove this when https://bugzilla.mozilla.org/show_bug.cgi?id=1893603 is done
 - name: Add Mozzilateam ppa
@@ -74,6 +74,7 @@
       - thunderbird-locale-fr
     state: latest
     allow_downgrade: true
+    update_cache: true
 
 - name: Prevent unattended upgrades to use snap packages
   copy:

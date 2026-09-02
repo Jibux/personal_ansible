@@ -6,12 +6,6 @@
 
 - when: test_mega is failed
   block:
-    - name: Add mega apt key
-      apt_key:
-        url: https://mega.nz/keys/MEGA_signing.key
-        keyring: /usr/share/keyrings/meganz-archive-keyring.gpg
-        state: present
-
     - name: Set ubuntu version for ubuntu
       set_fact:
         ubuntu_version: "{{ ansible_facts['distribution_version'] }}"
@@ -28,7 +22,14 @@
       when: ubuntu_version is not defined
 
     - name: Add mega repo
-      apt_repository:
-        repo: "deb [signed-by=/usr/share/keyrings/meganz-archive-keyring.gpg] https://mega.nz/linux/repo/xUbuntu_{{ ubuntu_version }}/ ./"
-        filename: megasync
+      deb822_repository:
+        name: megaio
+        types: deb
+        uris: "https://mega.nz/linux/repo/xUbuntu_{{ ubuntu_version }}/"
+        suites: ./
+        signed_by: https://mega.nz/keys/MEGA_signing.key
         state: present
+
+    - name: Update deb repos
+      apt:
+        update_cache: true

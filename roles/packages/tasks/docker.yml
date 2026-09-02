@@ -1,15 +1,13 @@
 ---
-- name: Add docker apt key
-  apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    keyring: /etc/apt/keyrings/docker.gpg
-    state: present
-
 - name: Add docker repo
-  apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_facts['distribution_release'] }} stable"
-    filename: docker
-    state: present
+  deb822_repository:
+    name: docker
+    types: deb
+    architectures: amd64
+    uris: https://download.docker.com/linux/ubuntu
+    signed_by: https://download.docker.com/linux/ubuntu/gpg
+    suites: "{{ ansible_facts['distribution_release'] }}"
+    components: stable
 
 - name: Install softwares
   apt:
