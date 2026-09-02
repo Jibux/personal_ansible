@@ -73,6 +73,7 @@
       - thunderbird
       - thunderbird-locale-fr
     state: latest
+    allow_downgrade: true
 
 - name: Prevent unattended upgrades to use snap packages
   copy:
