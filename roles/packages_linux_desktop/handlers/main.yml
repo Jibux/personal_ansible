@@ -4,3 +4,9 @@
     name: firefox
     state: absent
     purge: true
+
+- name: Purge thunderbird
+  ansible.builtin.apt:
+    name: thunderbird
+    state: absent
+    purge: true
