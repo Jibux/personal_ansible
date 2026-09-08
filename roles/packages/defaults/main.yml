@@ -1,6 +1,7 @@
 ---
 apt_packages:
   - git
+  - gitk
   - xsel
   - xclip
   - tree
