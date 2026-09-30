@@ -1,3 +1,4 @@
 [user]
 	name = Jibux
 	email = jibux@jibux.info
+	signingkey = /home/jbhugon/.ssh/perso_signing.pub

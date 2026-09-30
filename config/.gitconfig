@@ -1,4 +1,7 @@
 # vi:syntax=gitconfig
+# Doit rester avant les include : le dernier réglage lu l'emporte.
+[user]
+	signingkey = /home/jbhugon/.ssh/id_ed25519_signing.pub
 [include]
 	path = ~/.gitconfig.ansible
 [include]
@@ -66,12 +69,14 @@
 [column]
 	ui = auto
 [commit]
-        verbose = true
+	verbose = true
+	gpgsign = true
 [branch]
 	sort = -committerdate
 	autosetuprebase = always
 [tag]
 	sort = version:refname
+	gpgsign = true
 [pull]
 	rebase = true
 [rerere]
@@ -119,3 +124,5 @@
 	whitespace = red reverse
 [diff-so-fancy]
 	stripLeadingSymbols = false
+[gpg]
+	format = ssh
