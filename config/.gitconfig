@@ -1,7 +1,6 @@
 # vi:syntax=gitconfig
-# Doit rester avant les include : le dernier réglage lu l'emporte.
 [user]
-	signingkey = /home/jbhugon/.ssh/id_ed25519_signing.pub
+	signingkey = ~/.ssh/id_ed25519_signing.pub
 [include]
 	path = ~/.gitconfig.ansible
 [include]

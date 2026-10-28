@@ -5,8 +5,8 @@
 	name = {{ git_work_settings.user }}
 
 [includeIf "gitdir:{{ git_work_settings.personnal_dir | regex_replace('/*$', '/') }}"]
-	path = ~/.gitconfig-perso
+	path = ~/.gitconfig-perso.ansible
 {% else %}
 [include]
-	path = ~/.gitconfig-perso
+	path = ~/.gitconfig-perso.ansible
 {% endif %}

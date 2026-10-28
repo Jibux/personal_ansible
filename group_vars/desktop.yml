@@ -43,7 +43,9 @@ config_files:
   - src: .gitconfig.ansible.j2
     dest: .gitconfig.ansible
     kind: template
-  - src: .gitconfig-perso
+  - src: .gitconfig-perso.ansible.j2
+    dest: .gitconfig-perso.ansible
+    kind: template
   - src: .gitconfig
   - src: .tmux.conf
   - src: .screenrc
